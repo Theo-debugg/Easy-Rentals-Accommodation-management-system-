@@ -18,3 +18,4 @@ Thabethe SB 221030472
 
 Current project stage:
 Planning and requirements stage.
+Repository link: https://github.com/Theo-debugg/Easy-Rentals-Accommodation-management-system-.git
