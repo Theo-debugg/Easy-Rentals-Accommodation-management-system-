@@ -1,0 +1,258 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\WIL\\EasyRentalWebApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\easyrentalwebapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\easyrentalwebapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\models\\viewingrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\models\\viewingrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\models\\enquiry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\models\\enquiry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|d:\\wil\\easyrentalwebapp\\easyrentalwebapp\\models\\room.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2E68F1E-CBBC-7D94-1D61-6BBE9EAD8799}|EasyRentalWebApp\\EasyRentalWebApp.csproj|solutionrelative:easyrentalwebapp\\models\\room.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "EasyRentalWebApp\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T16:25:25.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Controllers\\DashboardController.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAAoAAACAZmZmZmYCwAoAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:59:21.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Feedback.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Feedback.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Models\\Feedback.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Feedback.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Models\\Feedback.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:56.417Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EasyRentalWebApp.csproj",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\EasyRentalWebApp.csproj",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\EasyRentalWebApp.csproj",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\EasyRentalWebApp.csproj",
+              "RelativeToolTip": "EasyRentalWebApp\\EasyRentalWebApp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-19T14:55:58.398Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Views\\Account\\Login.cshtml",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "EasyRentalWebApp\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T15:54:57.45Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAkAAAAgmpmZmZk6wCcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:56:36.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "EasyRentalWebApp\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAA0AAAAAMTMzMzP7vxYAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T15:02:00.35Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Program.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Program.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Program.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Program.cs",
+              "ViewState": "AgIAAAQAAAAAMDMzMzMLwAcAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:56.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T15:47:03.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\appsettings.json",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\appsettings.json",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\appsettings.json",
+              "RelativeToolTip": "EasyRentalWebApp\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-19T14:55:35.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Staff.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Models\\Staff.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Staff.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Models\\Staff.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:55.368Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ViewingRequest.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\ViewingRequest.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Models\\ViewingRequest.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\ViewingRequest.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Models\\ViewingRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:56.174Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Enquiry.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Enquiry.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Models\\Enquiry.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Enquiry.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Models\\Enquiry.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:55.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Room.cs",
+              "DocumentMoniker": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Room.cs",
+              "RelativeDocumentMoniker": "EasyRentalWebApp\\Models\\Room.cs",
+              "ToolTip": "D:\\WIL\\EasyRentalWebApp\\EasyRentalWebApp\\Models\\Room.cs",
+              "RelativeToolTip": "EasyRentalWebApp\\Models\\Room.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T14:55:49.302Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

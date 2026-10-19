@@ -1,4 +1,4 @@
-namespace EasyRentals_Web_App.Models
+namespace EasyRentalWebApp.Models
 {
     public class ErrorViewModel
     {

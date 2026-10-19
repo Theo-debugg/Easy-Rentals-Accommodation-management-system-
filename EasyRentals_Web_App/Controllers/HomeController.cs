@@ -1,8 +1,8 @@
-using System.Diagnostics;
-using EasyRentals_Web_App.Models;
+using EasyRentalWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
-namespace EasyRentals_Web_App.Controllers
+namespace EasyRentalWebApp.Controllers
 {
     public class HomeController : Controller
     {
