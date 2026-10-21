@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    var name = Context.Session.StaffName();
+}
+
+<section class="welcome-card">
+    <div class="eyebrow">Staff dashboard</div>
+    <h1>Welcome back, @name</h1>
+    <p class="muted">You are signed in to the Easy Rentals staff portal.</p>
+</section>
+
+
