@@ -21,7 +21,8 @@
             </div>
 
             <nav class="menu">
-                <a class="menu-item active" asp-controller="Dashboard" asp-action="Index">
+                <a class="menu-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+                   asp-controller="Dashboard" asp-action="Index">
                     <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
                     Dashboard
                 </a>
