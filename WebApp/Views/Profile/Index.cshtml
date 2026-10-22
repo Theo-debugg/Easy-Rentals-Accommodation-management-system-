@@ -1,0 +1,80 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Staff Profile";
+    ViewData["PageClass"] = "page-bleed";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+}
+
+<div class="pf-band"></div>
+
+<div class="pf-wrap">
+
+    @if (TempData["Message"] is string message)
+    {
+        <div class="pf-banner" role="status">@message</div>
+    }
+
+    <div class="pf-head">
+        <div class="pf-av" aria-hidden="true">@Model.Initials</div>
+        <div>
+            <h1>@Model.FullName</h1>
+            <span class="pf-chip">@Model.RoleLabel</span>
+            <span class="pf-ok">&#9679; Active</span>
+        </div>
+    </div>
+
+    <section class="pf-card" aria-label="Your details">
+        <div class="pf-card-top">
+            <div>
+                <div class="pf-eyebrow">Account</div>
+                <h2>Your details</h2>
+            </div>
+            
+        </div>
+
+        <div class="pf-tiles">
+            <div class="pf-tile">
+                <span class="pf-tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+                <div><div class="pf-label">Full name</div><div class="pf-value">@Model.FullName</div></div>
+            </div>
+            <div class="pf-tile">
+                <span class="pf-tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h4"/></svg></span>
+                <div><div class="pf-label">Staff ID</div><div class="pf-value small">@Model.StaffId</div></div>
+            </div>
+            <div class="pf-tile">
+                <span class="pf-tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg></span>
+                <div><div class="pf-label">Email</div><div class="pf-value">@Model.Email</div></div>
+            </div>
+            <div class="pf-tile">
+                <span class="pf-tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span>
+                <div><div class="pf-label">Role</div><div class="pf-value">@Model.RoleLabel</div></div>
+            </div>
+        </div>
+
+        <p class="pf-note">These details are managed by an administrator. Contact them if something needs to change.</p>
+    </section>
+
+    <section class="pf-card" aria-label="My activity">
+        <div class="pf-eyebrow">Overview</div>
+        <h2>My activity</h2>
+        <div class="pf-stats">
+            <div><b>@(Model.RepliesSent?.ToString() ?? "-")</b><span>Replies sent</span></div>
+            <div><b>@(Model.RoomsUpdated?.ToString() ?? "-")</b><span>Rooms updated</span></div>
+            <div><b>@(Model.OpenEnquiries?.ToString() ?? "-")</b><span>Open enquiries</span></div>
+        </div>
+    </section>
+
+    <section class="pf-card pf-security" aria-label="Security">
+        <div>
+            <div class="pf-eyebrow">Security</div>
+            <h2>Password</h2>
+            <p class="pf-muted">Use a password that only you know.</p>
+        </div>
+        <a class="pf-btn" asp-controller="Profile" asp-action="ChangePassword">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>
+            Change password
+        </a>
+    </section>
+</div>
