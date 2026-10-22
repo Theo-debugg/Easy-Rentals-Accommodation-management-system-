@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
+// The Enquiries page posts replies with fetch(), so it sends the anti-forgery token as a header.
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
+
 builder.Services.AddHttpClient<SupabaseService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

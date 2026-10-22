@@ -101,6 +101,14 @@ public class SupabaseService
         return JsonSerializer.Deserialize<List<T>>(body, Json) ?? new List<T>();
     }
 
+    public async Task InsertAsync(string token, string table, object row)
+    {
+        var req = Build(HttpMethod.Post, $"/rest/v1/{table}", token, JsonBody(row));
+        req.Headers.Add("Prefer", "return=minimal");
+        using var res = await _http.SendAsync(req);
+        await ReadOrThrow(res);
+    }
+
     public async Task UpdateAsync(string token, string table, string filter, object changes)
     {
         var req = Build(HttpMethod.Patch, $"/rest/v1/{table}?{filter}", token, JsonBody(changes));
