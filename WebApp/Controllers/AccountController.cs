@@ -51,6 +51,7 @@ public class AccountController : Controller
                 (DateTimeOffset.UtcNow.ToUnixTimeSeconds() + result.ExpiresIn - 60).ToString());
             HttpContext.Session.SetString("staff_id", staff.Id.ToString());
             HttpContext.Session.SetString("staff_name", staff.FullName);
+            HttpContext.Session.SetString("staff_email", model.Email.Trim());
             HttpContext.Session.SetString("must_change", staff.MustChangePassword ? "true" : "false");
 
             // 4. First login with the default password? Force a password change.
