@@ -36,10 +36,10 @@
                     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4M17 2v4M3 9h18"/></svg>
                     Viewing Requests
                 </span>
-                <span class="menu-item disabled" title="Coming soon">
+                <a class="menu-item @(current == "Enquiries" ? "active" : "")" asp-controller="Enquiries" asp-action="Index">
                     <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
                     Enquiries
-                </span>
+                </a>
                 <span class="menu-item disabled" title="Coming soon">
                     <svg viewBox="0 0 24 24"><path d="M2 19V5M2 15h20v4M22 15v-3a3 3 0 0 0-3-3h-8v6"/><circle cx="6.5" cy="11" r="1.8"/></svg>
                     Rooms

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace EasyRentalsStaff.Models;
 
 // A row of the "staff" table, as shown on the profile page.
@@ -5,7 +7,7 @@ public record ProfileRow(Guid Id, string FullName, string? Email, string? Role);
 
 // Tiny rows used only to count records.
 public record IdRow(Guid Id);
-public record RefRow(Guid ReferenceNo);
+public record RefRow([property: JsonPropertyName("ReferenceNo")] Guid ReferenceNo);
 
 public class ProfileViewModel
 {

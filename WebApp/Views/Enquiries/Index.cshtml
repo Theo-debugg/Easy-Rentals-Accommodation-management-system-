@@ -1,0 +1,96 @@
+@model EnquiriesViewModel
+@{
+    ViewData["Title"] = "Enquiries";
+    ViewData["PageClass"] = "page-wide";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/enquiries.css" asp-append-version="true" />
+}
+
+@Html.AntiForgeryToken()
+
+<div class="enq-page">
+    <div class="enq-eyebrow">Inbox</div>
+    <h1 class="enq-title">Enquiries</h1>
+    <p class="muted enq-sub">Student enquiries, newest first.</p>
+
+    @if (Model.LoadError is not null)
+    {
+        <div class="alert" role="alert">Could not load enquiries: @Model.LoadError</div>
+    }
+
+    <div class="enq-toolbar">
+        <div class="enq-pills" role="tablist" aria-label="Filter by status">
+            <button type="button" class="enq-pill active" data-filter="all">All <span id="cnt-all">@Model.All</span></button>
+            <button type="button" class="enq-pill" data-filter="new">New <span id="cnt-new">@Model.New</span></button>
+            <button type="button" class="enq-pill" data-filter="in_progress">In progress <span id="cnt-in_progress">@Model.InProgress</span></button>
+            <button type="button" class="enq-pill" data-filter="resolved">Resolved <span id="cnt-resolved">@Model.Resolved</span></button>
+        </div>
+        <input type="search" id="enq-search" class="enq-search" placeholder="Search student or subject" aria-label="Search enquiries" />
+    </div>
+
+    <div class="enq-table-wrap">
+        <table class="enq-table">
+            <thead>
+                <tr>
+                    <th class="col-ref">Ref</th>
+                    <th>Student</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th class="col-rec">Received</th>
+                    <th><span class="sr-only">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody id="enq-rows">
+                @foreach (var e in Model.Items)
+                {
+                    <tr class="enq-row" data-ref="@e.ReferenceNo" data-status="@e.Status"
+                        data-search="@((e.Student + " " + e.Subject + " " + e.ShortRef).ToLowerInvariant())">
+                        <td class="col-ref ref">@e.ShortRef</td>
+                        <td class="c-student">@e.Student</td>
+                        <td class="c-subject">@e.Subject</td>
+                        <td><span class="st st-@e.Status">@e.StatusLabel</span></td>
+                        <td class="col-rec">@e.Received</td>
+                        <td class="act"><button type="button" class="enq-open">Open</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p class="enq-empty" id="enq-empty" @(Model.Items.Count > 0 ? "hidden" : null)>
+            @(Model.LoadError is null && Model.Items.Count == 0 ? "No enquiries yet." : "No enquiries match.")
+        </p>
+    </div>
+</div>
+
+<div class="enq-backdrop" id="enq-backdrop" hidden></div>
+
+<aside class="enq-drawer" id="enq-drawer" role="dialog" aria-modal="true" aria-labelledby="d-subject" aria-hidden="true">
+    <header class="d-head">
+        <div class="d-titles">
+            <h2 id="d-subject">Enquiry</h2>
+            <div class="d-meta" id="d-meta"></div>
+        </div>
+        <div class="d-actions">
+            <span class="st" id="d-status"></span>
+            <button type="button" class="d-resolve" id="d-resolve">Resolve</button>
+            <button type="button" class="d-close" id="d-close" aria-label="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="d-error" id="d-error" role="alert" hidden></div>
+    <div class="d-messages" id="d-messages" aria-live="polite"></div>
+
+    <footer class="d-compose">
+        <textarea id="d-text" rows="2" maxlength="2000" placeholder="Type your reply..." aria-label="Reply"></textarea>
+        <button type="button" class="d-send" id="d-send">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" /></svg>
+            Send
+        </button>
+    </footer>
+</aside>
+
+@section Scripts {
+    <script src="~/js/enquiries.js" asp-append-version="true"></script>
+}

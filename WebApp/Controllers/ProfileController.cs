@@ -26,7 +26,7 @@ public class ProfileController : Controller
         // The activity numbers are a bonus: if one fails, show "-" instead of breaking the page.
         var replies = await CountAsync<IdRow>(token, "enquiry_messages", $"staff_id=eq.{id}&select=id");
         var rooms = await CountAsync<IdRow>(token, "rooms", $"updated_by=eq.{id}&select=id");
-        var open = await CountAsync<RefRow>(token, "enquiries", "status=eq.new&select=reference_no");
+        var open = await CountAsync<RefRow>(token, "enquiries", "status=eq.new&select=ReferenceNo");
 
         return View(new ProfileViewModel(staff, replies, rooms, open));
     }
