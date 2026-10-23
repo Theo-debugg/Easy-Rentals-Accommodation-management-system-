@@ -1,0 +1,194 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\EasyRentalsStaff.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.slnx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\EasyRentalsStaff.slnx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Feedback\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Views\\Feedback\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_Stars.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Views\\Shared\\_Stars.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_StaffLayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Views\\Shared\\_StaffLayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Controllers\\FeedbackController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Controllers\\FeedbackController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\ViewModels\\FeedbackPageViewMode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\ViewModels\\FeedbackPageViewMode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\FeedbackItem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Models\\FeedbackItem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\Models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApp\\Models\\Models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EasyRentalsStaff.slnx",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.slnx",
+              "RelativeDocumentMoniker": "WebApp\\EasyRentalsStaff.slnx",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.slnx",
+              "RelativeToolTip": "WebApp\\EasyRentalsStaff.slnx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-22T19:55:22.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EasyRentalsStaff.csproj",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.csproj",
+              "RelativeDocumentMoniker": "WebApp\\EasyRentalsStaff.csproj",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\EasyRentalsStaff.csproj",
+              "RelativeToolTip": "WebApp\\EasyRentalsStaff.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-22T19:54:47.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Program.cs",
+              "RelativeDocumentMoniker": "WebApp\\Program.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Program.cs",
+              "RelativeToolTip": "WebApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-22T19:54:41.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Feedback\\Index.cshtml",
+              "RelativeDocumentMoniker": "WebApp\\Views\\Feedback\\Index.cshtml",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Feedback\\Index.cshtml",
+              "RelativeToolTip": "WebApp\\Views\\Feedback\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHoAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-22T19:51:25.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Stars.cshtml",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_Stars.cshtml",
+              "RelativeDocumentMoniker": "WebApp\\Views\\Shared\\_Stars.cshtml",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_Stars.cshtml",
+              "RelativeToolTip": "WebApp\\Views\\Shared\\_Stars.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-22T19:50:11.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_StaffLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_StaffLayout.cshtml",
+              "RelativeDocumentMoniker": "WebApp\\Views\\Shared\\_StaffLayout.cshtml",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Views\\Shared\\_StaffLayout.cshtml",
+              "RelativeToolTip": "WebApp\\Views\\Shared\\_StaffLayout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-22T19:47:20.921Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FeedbackController.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Controllers\\FeedbackController.cs",
+              "RelativeDocumentMoniker": "WebApp\\Controllers\\FeedbackController.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Controllers\\FeedbackController.cs",
+              "RelativeToolTip": "WebApp\\Controllers\\FeedbackController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-22T19:44:00.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "FeedbackPageViewMode.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\ViewModels\\FeedbackPageViewMode.cs",
+              "RelativeDocumentMoniker": "WebApp\\ViewModels\\FeedbackPageViewMode.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\ViewModels\\FeedbackPageViewMode.cs",
+              "RelativeToolTip": "WebApp\\ViewModels\\FeedbackPageViewMode.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-22T19:42:35.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FeedbackItem.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\FeedbackItem.cs",
+              "RelativeDocumentMoniker": "WebApp\\Models\\FeedbackItem.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\FeedbackItem.cs",
+              "RelativeToolTip": "WebApp\\Models\\FeedbackItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-22T19:38:42.186Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Models.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\Models.cs",
+              "RelativeDocumentMoniker": "WebApp\\Models\\Models.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\2026\\SCHOOL\\Phase 3 WIL\\WebApp\\Models\\Models.cs",
+              "RelativeToolTip": "WebApp\\Models\\Models.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-22T19:27:53.293Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
