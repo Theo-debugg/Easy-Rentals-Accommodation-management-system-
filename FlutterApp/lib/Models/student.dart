@@ -1,18 +1,11 @@
-class ViewingRequest {
-  final String propertyTitle;
-  final String propertyAddress;
-  final String room;
-  final String date;
-  final String time;
-  final String status;
+class Student {
+  final String id;
+  final String fullName;
+  final String email;
 
-  const ViewingRequest({
-    required this.propertyTitle,
-    required this.propertyAddress,
-    required this.room,
-    required this.date,
-    required this.time,
-    required this.status,
-  });
+  const Student({required this.id, required this.fullName, required this.email});
+
+  factory Student.fromAuthUser({required String id, String? email, Map<String, dynamic>? metadata}) => Student(id: id, fullName: (metadata?['full_name'] as String?) ?? '', email: email ?? '');
 }
+
 //student.dart
