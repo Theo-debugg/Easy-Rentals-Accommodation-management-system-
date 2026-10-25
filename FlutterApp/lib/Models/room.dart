@@ -1,4 +1,3 @@
-//room model
 class Room {
   final String id;
   final String title;
