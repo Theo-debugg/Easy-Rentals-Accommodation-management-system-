@@ -8,14 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\RoomsController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Controllers\RoomsController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Supabase.Postgrest" Version="8.0.0" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/r.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/roomAdd.css" asp-append-version="true" />
 }
 
 <div class="rooms-page">
@@ -138,10 +138,6 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
     <script>
         // Highlight selected radio buttons on load and click
         function updateRadioStyles() {
