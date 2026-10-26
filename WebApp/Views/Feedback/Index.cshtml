@@ -1,0 +1,123 @@
+﻿@model EasyRentalsStaff.ViewModels.FeedbackPageViewModel
+@{
+    Layout = "_Layout";          // change to your own layout if you have one
+    ViewData["Title"] = "Feedback";
+    ViewData["PageTitle"] = "Feedback";
+}
+
+<div class="feedback-page">
+
+    <!-- Header card -->
+    <section class="feedback-header">
+        <p class="feedback-eyebrow">Staff Feedback</p>
+        <h1 class="feedback-title">What students are saying</h1>
+        <p class="feedback-subtitle">See what students are saying about your property.</p>
+    </section>
+
+    <div class="feedback-layout">
+
+        <!-- LEFT: summary cards -->
+        <aside class="feedback-summary">
+
+            <section class="summary-card">
+                <h3>Average Rating</h3>
+                <div class="avg-number">@Model.AverageRating.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)</div>
+                <partial name="_Stars" model="(int)Math.Round(Model.AverageRating)" />
+                <div class="avg-based">Based on @Model.TotalReviews reviews</div>
+            </section>
+
+            <section class="summary-card">
+                <h3>Rating Breakdown</h3>
+                @foreach (var star in new[] { 5, 4, 3, 2, 1 })
+                {
+                    var count = Model.RatingBreakdown.TryGetValue(star, out var c) ? c : 0;
+                    var percent = Model.TotalReviews > 0 ? count * 100.0 / Model.TotalReviews : 0;
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">@star &#9733;</span>
+                        <div class="breakdown-track">
+                            <div class="breakdown-fill" style="width:@percent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%"></div>
+                        </div>
+                        <span class="breakdown-count">@count</span>
+                    </div>
+                }
+            </section>
+
+        </aside>
+
+        <!-- RIGHT: search, sort, reviews, paging -->
+        <section class="feedback-main">
+
+            <form method="get" asp-controller="Feedback" asp-action="Index" class="feedback-toolbar">
+                <label class="search-box">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
+                    <input type="text" name="searchTerm" value="@Model.SearchTerm"
+                           placeholder="Search feedback" autocomplete="off" aria-label="Search feedback" />
+                </label>
+
+                <select name="sortOrder" class="sort-select" aria-label="Sort feedback" onchange="this.form.submit()">
+                    <option value="newest" selected="@(Model.SortOrder == "newest")">Sort: Newest</option>
+                    <option value="oldest" selected="@(Model.SortOrder == "oldest")">Sort: Oldest</option>
+                    <option value="highest" selected="@(Model.SortOrder == "highest")">Sort: Highest rating</option>
+                    <option value="lowest" selected="@(Model.SortOrder == "lowest")">Sort: Lowest rating</option>
+                </select>
+            </form>
+
+            <div class="reviews-panel">
+                @if (Model.Reviews.Any())
+                {
+                    foreach (var review in Model.Reviews)
+                    {
+                        <article class="review-card">
+                            <div class="review-header">
+                                <div class="avatar">@review.Initials</div>
+                                <div class="review-who">
+                                    <div class="review-name">@review.StudentName</div>
+                                    <div class="review-property">@review.PropertyName</div>
+                                </div>
+                                <div class="review-meta">
+                                    <partial name="_Stars" model="review.Rating" />
+                                    <div class="review-date">@review.DateSubmitted.ToString("dd MMM yyyy")</div>
+                                </div>
+                            </div>
+                            <p class="review-comment">@review.Comment</p>
+                        </article>
+                    }
+
+                    <div class="pager">
+                        <span>Showing @Model.ShowingFrom&ndash;@Model.ShowingTo of @Model.FilteredCount reviews</span>
+                        <div class="pager-buttons">
+                            @if (Model.Page > 1)
+                            {
+                                <a class="pager-btn" asp-action="Index"
+                                   asp-route-searchTerm="@Model.SearchTerm"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-page="@(Model.Page - 1)">Previous</a>
+                            }
+                            else
+                            {
+                                <span class="pager-btn disabled">Previous</span>
+                            }
+
+                            @if (Model.Page < Model.TotalPages)
+                            {
+                                <a class="pager-btn primary" asp-action="Index"
+                                   asp-route-searchTerm="@Model.SearchTerm"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-page="@(Model.Page + 1)">Next</a>
+                            }
+                            else
+                            {
+                                <span class="pager-btn primary disabled">Next</span>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="no-reviews">No feedback found.</div>
+                }
+            </div>
+
+        </section>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+﻿@model int
+
+<span class="stars" role="img" aria-label="@Model out of 5 stars">
+    @for (int i = 1; i <= 5; i++)
+    {
+        <span class="star @(i <= Model ? "filled" : "empty")">&#9733;</span>
+    }
+</span>
