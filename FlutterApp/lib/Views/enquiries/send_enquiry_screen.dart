@@ -58,7 +58,10 @@ class _SendEnquiryScreenState extends State<SendEnquiryScreen> {
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: const Text('Enquiry Submitted'),
-          content: const Text('Your enquiry has been recorded for this session. Permanent storage and replies are not connected yet.'),
+          content: const Text(
+  'Your enquiry has been saved successfully. '
+  'Our team will review it.',
+),
           actions: [
             TextButton(
               onPressed: () {

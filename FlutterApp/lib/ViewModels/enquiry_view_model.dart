@@ -1,16 +1,48 @@
-import 'package:easy_rentals_mobile_app/Models/enquiry.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Keeps enquiry validation/state out of the UI. This remains local until an
-/// enquiries table and its access policies are configured in Supabase.
 class EnquiryViewModel {
-  final List<Enquiry> _submitted = [];
-  List<Enquiry> get submitted => List.unmodifiable(_submitted);
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<void> submit({required String subject, required String message}) async {
+  Future<void> submit({
+    required String subject,
+    required String message,
+    String? propertyId,
+    String? roomId,
+  }) async {
     final cleanSubject = subject.trim();
     final cleanMessage = message.trim();
-    if (cleanSubject.isEmpty) throw ArgumentError('Please enter a subject.');
-    if (cleanMessage.isEmpty) throw ArgumentError('Please enter your message.');
-    _submitted.insert(0, Enquiry(subject: cleanSubject, message: cleanMessage, createdAt: DateTime.now()));
+
+    if (cleanSubject.isEmpty) {
+      throw ArgumentError('Please enter a subject.');
+    }
+
+    if (cleanMessage.isEmpty) {
+      throw ArgumentError('Please enter your message.');
+    }
+
+    final user = _supabase.auth.currentUser;
+
+    if (user == null) {
+      throw Exception('Please log in before submitting an enquiry.');
+    }
+
+    final enquiryData = <String, dynamic>{
+      'student_id': user.id,
+      'subject': cleanSubject,
+      'message': cleanMessage,
+      'status': 'Pending',
+    };
+
+    if (propertyId != null && propertyId.trim().isNotEmpty) {
+      enquiryData['property_id'] = propertyId.trim();
+    }
+
+    if (roomId != null && roomId.trim().isNotEmpty) {
+      enquiryData['room_id'] = roomId.trim();
+    }
+
+    await _supabase
+        .from('enquiries')
+        .insert(enquiryData);
   }
 }
