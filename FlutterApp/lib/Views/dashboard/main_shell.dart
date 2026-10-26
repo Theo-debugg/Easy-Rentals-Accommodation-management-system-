@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:easy_rentals_mobile_app/view_models/auth_view_model.dart';
+import 'package:easy_rentals_mobile_app/ViewModels/auth_view_model.dart';
 //import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
-import 'package:easy_rentals_mobile_app/views/shared/custom_bottom_nav.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/home_tab.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/properties_tab.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/requests_tab.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/messages_tab.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/profile_tab.dart';
-import 'package:easy_rentals_mobile_app/views/authentication/login_screen.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/custom_bottom_nav.dart';
+import 'package:easy_rentals_mobile_app/Views/dashboard/home_tab.dart';
+import 'package:easy_rentals_mobile_app/Views/dashboard/properties_tab.dart';
+import 'package:easy_rentals_mobile_app/Views/dashboard/requests_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/messages_tab.dart';
+import 'package:easy_rentals_mobile_app/Views/dashboard/profile_tab.dart';
+import 'package:easy_rentals_mobile_app/Views/authentication/login_screen.dart';
+//import 'package:easy_rentals_mobile_app/Views/dashboard/messages_tab.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});

@@ -1,8 +1,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:easy_rentals_mobile_app/models/appointment.dart';
-import 'package:easy_rentals_mobile_app/models/viewing_request.dart';
+import 'package:easy_rentals_mobile_app/Models/appointment.dart';
+import 'package:easy_rentals_mobile_app/Models/viewing_request.dart';
 
 /// Central place for creating and retrieving viewing requests.
 class RequestsViewModel extends ChangeNotifier {

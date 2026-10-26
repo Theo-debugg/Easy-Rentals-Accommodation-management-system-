@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
-import 'package:easy_rentals_mobile_app/view_models/rooms_view_model.dart';
-import 'package:easy_rentals_mobile_app/views/property/room_details_screen.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
+import 'package:easy_rentals_mobile_app/ViewModels/rooms_view_model.dart';
+import 'package:easy_rentals_mobile_app/Views/property/room_details_screen.dart';
 
 class PropertiesTab extends StatefulWidget {
   const PropertiesTab({super.key});

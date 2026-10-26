@@ -1,4 +1,4 @@
-import 'package:easy_rentals_mobile_app/models/room.dart';
+import 'package:easy_rentals_mobile_app/Models/room.dart';
 
 class RoomsViewModel {
   const RoomsViewModel();

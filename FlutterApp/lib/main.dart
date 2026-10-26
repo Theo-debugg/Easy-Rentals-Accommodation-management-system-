@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 import 'package:easy_rentals_mobile_app/Views/authentication/login_screen.dart';
 
 Future<void> main() async {

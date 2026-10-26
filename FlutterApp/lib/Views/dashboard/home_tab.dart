@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:easy_rentals_mobile_app/views/enquiries/send_enquiry_screen.dart';
-import 'package:easy_rentals_mobile_app/views/feedback_screen.dart';
+import 'package:easy_rentals_mobile_app/Views/enquiries/send_enquiry_screen.dart';
+import 'package:easy_rentals_mobile_app/Views/feedback_screen.dart';
 
 class HomeTab extends StatelessWidget {
   final Function(int) onNavigateToTab;

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
-import 'package:easy_rentals_mobile_app/view_models/requests_view_model.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
+import 'package:easy_rentals_mobile_app/ViewModels/requests_view_model.dart';
 
 class RequestsTab extends StatefulWidget {
   const RequestsTab({super.key});
