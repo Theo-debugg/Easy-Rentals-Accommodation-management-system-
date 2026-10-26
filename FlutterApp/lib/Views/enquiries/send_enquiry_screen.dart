@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
-import 'package:easy_rentals_mobile_app/view_models/enquiry_view_model.dart';
-import 'package:easy_rentals_mobile_app/views/shared/custom_bottom_nav.dart';
-import 'package:easy_rentals_mobile_app/views/shared/custom_button.dart';
-import 'package:easy_rentals_mobile_app/views/dashboard/main_shell.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
+import 'package:easy_rentals_mobile_app/ViewModels/enquiry_view_model.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/custom_bottom_nav.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/custom_button.dart';
+import 'package:easy_rentals_mobile_app/Views/dashboard/main_shell.dart';
 
 class SendEnquiryScreen extends StatefulWidget {
   final String? initialSubject;
