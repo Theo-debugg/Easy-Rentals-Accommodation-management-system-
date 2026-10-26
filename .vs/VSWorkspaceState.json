@@ -1,6 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WebApp",
+    "\\WebApp\\Controllers",
+    "\\WebApp\\Views",
+    "\\WebApp\\Views\\Account",
+    "\\WebApp\\Views\\Dashboard",
+    "\\WebApp\\Views\\Shared",
+    "\\WebApp\\wwwroot"
   ],
+  "SelectedNode": "\\WebApp\\EasyRentalsStaff.slnx",
   "PreviewInSolutionExplorer": false
 }

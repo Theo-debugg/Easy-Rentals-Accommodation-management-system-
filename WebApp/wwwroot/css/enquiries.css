@@ -1,0 +1,115 @@
+/* Enquiries list page + slide-in conversation panel. Loaded only on /Enquiries. */
+
+.page.page-wide { max-width: 1280px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.enq-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--brand); }
+.enq-title { margin: 6px 0 4px; font-size: 32px; }
+.enq-sub { margin: 0 0 22px; }
+
+/* ---------- filters + search ---------- */
+.enq-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.enq-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+.enq-pill {
+  background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 999px;
+  padding: 9px 18px; font: 600 14px "Montserrat", Arial, sans-serif; cursor: pointer;
+}
+.enq-pill span { color: var(--muted); font-weight: 500; margin-left: 4px; }
+.enq-pill:hover { border-color: var(--brand); }
+.enq-pill.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+.enq-pill.active span { color: #e5dafc; }
+.enq-search {
+  width: 260px; max-width: 100%; height: 44px; padding: 0 14px;
+  background: var(--field); border: 1px solid var(--line); border-radius: 2px;
+  font: 500 14px "Montserrat", Arial, sans-serif; color: var(--ink);
+}
+.enq-search:focus { outline: 2px solid var(--brand); background: #fff; }
+
+/* ---------- table ---------- */
+.enq-table-wrap { background: #fff; border-top: 4px solid var(--brand); box-shadow: 0 10px 32px rgba(30, 20, 60, .08); overflow-x: auto; }
+.enq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.enq-table th {
+  text-align: left; padding: 16px 14px; font-size: 11px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: #4a4a52; border-bottom: 1px solid #ecebf0;
+}
+.enq-table td { padding: 16px 14px; border-bottom: 1px solid #f0eff4; vertical-align: middle; }
+.enq-row.active { background: var(--brand-soft); }
+.enq-row[data-status="new"] .c-student,
+.enq-row[data-status="new"] .c-subject { font-weight: 700; }
+.enq-table .ref { color: var(--muted); font-size: 13px; letter-spacing: .02em; }
+.enq-table .act { text-align: right; width: 1%; white-space: nowrap; }
+.enq-row[hidden] { display: none; }
+
+.enq-open, .d-resolve {
+  background: #fff; color: var(--brand-dark); border: 1.5px solid var(--brand); border-radius: 6px;
+  padding: 9px 20px; font: 700 14px "Montserrat", Arial, sans-serif; cursor: pointer;
+}
+.enq-open:hover, .d-resolve:hover { background: var(--brand-soft); }
+.enq-empty { margin: 0; padding: 36px 16px; text-align: center; color: var(--muted); }
+.enq-empty[hidden] { display: none; }
+
+/* ---------- status chips ---------- */
+.st { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.st-new { background: var(--brand-soft); color: #3d1a8f; }
+.st-in_progress { background: #fdecc4; color: #6b4300; }
+.st-resolved { background: #e3f3e7; color: #1b5e32; }
+
+/* ---------- slide-in panel ---------- */
+.enq-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(20, 10, 40, .35); }
+.enq-backdrop[hidden] { display: none; }
+
+.enq-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 60;
+  width: min(580px, 100%); background: #fff; border-top: 4px solid var(--brand);
+  box-shadow: -16px 0 44px rgba(30, 20, 60, .22);
+  display: flex; flex-direction: column;
+  transform: translateX(100%); visibility: hidden;
+  transition: transform .22s ease, visibility 0s linear .22s;
+}
+.enq-drawer.open { transform: none; visibility: visible; transition-delay: 0s; }
+
+.d-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 20px 14px; border-bottom: 1px solid #ecebf0; }
+.d-titles { min-width: 0; }
+.d-titles h2 { margin: 0 0 4px; font-size: 18px; overflow-wrap: anywhere; }
+.d-meta { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.d-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.d-resolve { padding: 8px 16px; }
+.d-resolve[hidden] { display: none; }
+.d-close { width: 36px; height: 36px; display: grid; place-items: center; background: none; border: 0; border-radius: 6px; color: #555; cursor: pointer; }
+.d-close:hover { background: var(--brand-soft); color: var(--brand-dark); }
+
+.d-error { margin: 12px 20px 0; padding: 10px 12px; background: #fdecea; color: #8a1c14; border-left: 4px solid var(--danger); border-radius: 4px; font-size: 13px; }
+.d-error[hidden] { display: none; }
+
+.d-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #fcfcfd; }
+.d-loading { color: var(--muted); text-align: center; margin-top: 30px; font-size: 14px; }
+.msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; background: #eeedf2; font-size: 14px; line-height: 1.55; }
+.msg .who { display: block; font-size: 11px; font-weight: 600; color: #55555d; margin-bottom: 4px; }
+.msg .body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg.staff { align-self: flex-end; background: var(--brand); color: #fff; }
+.msg.staff .who { color: #e1d6fb; }
+
+.d-compose { display: flex; gap: 12px; align-items: flex-end; padding: 14px 20px 18px; border-top: 1px solid #ecebf0; }
+.d-compose textarea {
+  flex: 1; resize: vertical; min-height: 52px; max-height: 160px; padding: 12px 14px;
+  background: var(--field); border: 1px solid var(--line); border-radius: 2px;
+  font: 500 14px "Montserrat", Arial, sans-serif; color: var(--ink);
+}
+.d-compose textarea:focus { outline: 2px solid var(--brand); background: #fff; }
+.d-send {
+  display: inline-flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px;
+  background: var(--brand); color: #fff; border: 0; border-radius: 8px;
+  font: 700 14px "Montserrat", Arial, sans-serif; cursor: pointer;
+}
+.d-send:hover { background: var(--brand-dark); }
+.d-send:disabled { opacity: .6; cursor: wait; }
+.d-send svg { width: 18px; height: 18px; }
+
+body.drawer-open { overflow: hidden; }
+
+@media (max-width: 760px) {
+  .col-ref, .col-rec { display: none; }
+  .enq-search { width: 100%; }
+  .d-head { flex-wrap: wrap; }
+}
