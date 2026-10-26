@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_rentals_mobile_app/ViewModels/auth_view_model.dart';
-//import 'package:easy_rentals_mobile_app/views/shared/app_theme.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/custom_bottom_nav.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/home_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/properties_tab.dart';
@@ -8,7 +8,6 @@ import 'package:easy_rentals_mobile_app/Views/dashboard/requests_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/messages_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/profile_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/authentication/login_screen.dart';
-//import 'package:easy_rentals_mobile_app/Views/dashboard/messages_tab.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -28,8 +27,6 @@ class MainShell extends StatefulWidget {
 class MainShellState extends State<MainShell> {
   int _currentIndex = 0;
   final AuthViewModel _auth = AuthViewModel();
-
-  static const Color primaryBlue = Color(0xFF2459A9);
 
   List<Widget> get _tabs => [
         HomeTab(onNavigateToTab: setIndex),
@@ -61,11 +58,12 @@ class MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      backgroundColor: AppTheme.background,
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: AppTheme.white,
+        surfaceTintColor: AppTheme.white,
+        foregroundColor: AppTheme.textPrimary,
         elevation: 1,
         automaticallyImplyLeading: false,
         toolbarHeight: 76,
@@ -77,7 +75,7 @@ class MainShellState extends State<MainShell> {
               height: 42,
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: primaryBlue.withValues(alpha: 0.10),
+                color: AppTheme.primaryPurple.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Image.asset(
@@ -86,7 +84,7 @@ class MainShellState extends State<MainShell> {
                 errorBuilder: (context, error, stackTrace) {
                   return const Icon(
                     Icons.home_work_outlined,
-                    color: primaryBlue,
+                    color: AppTheme.primaryPurple,
                     size: 28,
                   );
                 },
@@ -104,7 +102,7 @@ class MainShellState extends State<MainShell> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Color(0xFF202A38),
+                      color: AppTheme.textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -115,7 +113,7 @@ class MainShellState extends State<MainShell> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: AppTheme.textSecondary,
                       fontSize: 10,
                     ),
                   ),
@@ -128,7 +126,7 @@ class MainShellState extends State<MainShell> {
               onPressed: _handleLogout,
               icon: const Icon(
                 Icons.logout_outlined,
-                color: Color(0xFF39465A),
+                color: AppTheme.textSecondary,
               ),
             ),
 
@@ -143,7 +141,7 @@ class MainShellState extends State<MainShell> {
               },
               icon: const Icon(
                 Icons.notifications_none,
-                color: Color(0xFF39465A),
+                color: AppTheme.textSecondary,
               ),
             ),
 
@@ -152,7 +150,7 @@ class MainShellState extends State<MainShell> {
               onPressed: () => setIndex(4),
               icon: const Icon(
                 Icons.person_outline,
-                color: Color(0xFF39465A),
+                color: AppTheme.primaryPurple,
               ),
             ),
           ],

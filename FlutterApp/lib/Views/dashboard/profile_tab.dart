@@ -114,7 +114,7 @@ class _ProfileTabState extends State<ProfileTab> {
           Center(
             child: CircleAvatar(
               radius: 50,
-              backgroundColor: Colors.grey[400],
+              backgroundColor: Colors.deepPurple[400],
               child: const Icon(Icons.person, size: 60, color: Colors.white),
             ),
           ),

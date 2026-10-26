@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 import 'package:easy_rentals_mobile_app/Views/enquiries/send_enquiry_screen.dart';
 import 'package:easy_rentals_mobile_app/Views/feedback_screen.dart';
 
@@ -10,14 +11,10 @@ class HomeTab extends StatelessWidget {
     required this.onNavigateToTab,
   });
 
-  static const Color primaryBlue = Color(0xFF2459A9);
-  static const Color backgroundColor = Color(0xFFF7F9FC);
-  static const Color textColor = Color(0xFF202A38);
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor,
+      color: AppTheme.background,
       width: double.infinity,
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
@@ -29,7 +26,7 @@ class HomeTab extends StatelessWidget {
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
-                color: textColor,
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -37,7 +34,7 @@ class HomeTab extends StatelessWidget {
               'What would you like to do today?',
               style: TextStyle(
                 fontSize: 14,
-                color: Color(0xFF737D8C),
+                color: AppTheme.textSecondary,
               ),
             ),
             const SizedBox(height: 24),
@@ -45,6 +42,7 @@ class HomeTab extends StatelessWidget {
             _buildActionCard(
               icon: Icons.home_outlined,
               title: 'Browse Property',
+              accentColor: AppTheme.primaryPurple,
               onTap: () => onNavigateToTab(1),
             ),
             const SizedBox(height: 18),
@@ -52,6 +50,7 @@ class HomeTab extends StatelessWidget {
             _buildActionCard(
               icon: Icons.calendar_month_outlined,
               title: 'My Requests',
+              accentColor: AppTheme.brandGreen,
               onTap: () => onNavigateToTab(2),
             ),
             const SizedBox(height: 18),
@@ -59,6 +58,7 @@ class HomeTab extends StatelessWidget {
             _buildActionCard(
               icon: Icons.chat_bubble_outline,
               title: 'Send Inquiry',
+              accentColor: AppTheme.brandOrange,
               onTap: () {
                 Navigator.push(
                   context,
@@ -73,6 +73,7 @@ class HomeTab extends StatelessWidget {
             _buildActionCard(
               icon: Icons.star_outline,
               title: 'Feedback',
+              accentColor: AppTheme.primaryPurple,
               onTap: () {
                 Navigator.push(
                   context,
@@ -91,10 +92,11 @@ class HomeTab extends StatelessWidget {
   Widget _buildActionCard({
     required IconData icon,
     required String title,
+    required Color accentColor,
     required VoidCallback onTap,
   }) {
     return Material(
-      color: Colors.white,
+      color: AppTheme.cardColor,
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
@@ -105,7 +107,7 @@ class HomeTab extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: const Color(0xFFE8EDF4),
+              color: AppTheme.borderColor,
               width: 1,
             ),
             boxShadow: [
@@ -122,7 +124,7 @@ class HomeTab extends StatelessWidget {
               Icon(
                 icon,
                 size: 36,
-                color: primaryBlue,
+                color: accentColor,
               ),
               const SizedBox(height: 12),
               Text(
@@ -131,7 +133,7 @@ class HomeTab extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: textColor,
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
