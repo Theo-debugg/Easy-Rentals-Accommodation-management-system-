@@ -33,6 +33,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();      // serves wwwroot (css, js, logo)
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
