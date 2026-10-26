@@ -1,16 +1,47 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:easy_rentals_mobile_app/Models/room.dart';
 
 class RoomsViewModel {
-  const RoomsViewModel();
-  static const List<Room> rooms = [
-    Room(id: 'park-west-1', title: '20 Steven Street, Park West', address: '20 Steven Street, Park West', suburb: 'Blenheim', bedrooms: 4, bathrooms: 2, monthlyRent: 12000, status: 'Available'),
-    Room(id: 'park-west-2', title: '20 Steven Street, Park West', address: '20 Steven Street, Park West', suburb: 'Blenheim', bedrooms: 4, bathrooms: 2, monthlyRent: 12000, status: 'Occupied'),
-    Room(id: 'park-west-3', title: '20 Steven Street, Park West', address: '20 Steven Street, Park West', suburb: 'Blenheim', bedrooms: 4, bathrooms: 2, monthlyRent: 12000, status: 'Available'),
-  ];
+  RoomsViewModel();
 
-  List<Room> filter({String query = '', String status = 'Available'}) => rooms.where((room) {
-    final matchesQuery = '${room.title} ${room.suburb} ${room.address}'.toLowerCase().contains(query.trim().toLowerCase());
-    final matchesStatus = status == 'All' || room.status.toLowerCase() == status.toLowerCase();
-    return matchesQuery && matchesStatus;
-  }).toList(growable: false);
+  Future<List<Room>> fetchRooms() async {
+    final response = await Supabase.instance.client
+        .from('room')
+        .select()
+        .order('updated_at', ascending: false);
+
+    return (response as List)
+        .map(
+          (row) => Room.fromMap(
+            Map<String, dynamic>.from(row as Map),
+          ),
+        )
+        .toList();
+  }
+
+  List<Room> filter(
+    List<Room> rooms, {
+    String query = '',
+    String status = 'Available',
+  }) {
+    final search = query.trim().toLowerCase();
+
+    return rooms.where((room) {
+      final searchableText = [
+        room.roomNumber,
+        room.roomType,
+        room.description,
+        room.propertyId,
+        ...room.amenities,
+      ].join(' ').toLowerCase();
+
+      final matchesQuery = searchableText.contains(search);
+
+      final matchesStatus = status == 'All' ||
+          room.availability.trim().toLowerCase() ==
+              status.toLowerCase();
+
+      return matchesQuery && matchesStatus;
+    }).toList(growable: false);
+  }
 }

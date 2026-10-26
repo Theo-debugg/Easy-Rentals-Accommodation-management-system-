@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_rentals_mobile_app/Models/room.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 import 'package:easy_rentals_mobile_app/ViewModels/rooms_view_model.dart';
 import 'package:easy_rentals_mobile_app/Views/property/room_details_screen.dart';
@@ -13,12 +14,20 @@ class PropertiesTab extends StatefulWidget {
 class _PropertiesTabState extends State<PropertiesTab> {
   int _selectedFilter = 0;
   final List<String> _filters = ['Available', 'Occupied'];
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController =
+      TextEditingController();
 
-  // Temporary testing mode: the ASP.NET rooms API is not connected yet.
-  static const bool _useEmptyRoomsForTesting = true;
+  final RoomsViewModel _roomsViewModel = RoomsViewModel();
 
-  final RoomsViewModel _roomsViewModel = const RoomsViewModel();
+  List<Room> _rooms = [];
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRooms();
+  }
 
   @override
   void dispose() {
@@ -26,10 +35,35 @@ class _PropertiesTabState extends State<PropertiesTab> {
     super.dispose();
   }
 
+  Future<void> _loadRooms() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final rooms = await _roomsViewModel.fetchRooms();
+
+      if (!mounted) return;
+
+      setState(() {
+        _rooms = rooms;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,7 +72,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             controller: _searchController,
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
-              hintText: 'Search here...',
+              hintText: 'Search rooms...',
               prefixIcon: const Icon(
                 Icons.search,
                 color: Colors.grey,
@@ -85,13 +119,62 @@ class _PropertiesTabState extends State<PropertiesTab> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: _useEmptyRoomsForTesting
-                ? _buildEmptyRoomsMessage()
-                : _buildRoomList(),
+            child: _buildContent(),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildContent() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_error != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.cloud_off_outlined,
+                size: 48,
+                color: Colors.grey,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Could not load rooms',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _error!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _loadRooms,
+                child: const Text('Try again'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_rooms.isEmpty) {
+      return _buildEmptyRoomsMessage();
+    }
+
+    return _buildRoomList();
   }
 
   Widget _buildEmptyRoomsMessage() {
@@ -117,13 +200,18 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Rooms will appear here once they have been '
-              'added to the system. Please check back soon.',
+              'Rooms added to the system will appear here.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
               ),
+            ),
+            const SizedBox(height: 16),
+            TextButton.icon(
+              onPressed: _loadRooms,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Refresh rooms'),
             ),
           ],
         ),
@@ -133,45 +221,56 @@ class _PropertiesTabState extends State<PropertiesTab> {
 
   Widget _buildRoomList() {
     final filteredRooms = _roomsViewModel.filter(
+      _rooms,
       query: _searchController.text,
       status: _filters[_selectedFilter],
     );
 
     if (filteredRooms.isEmpty) {
       return const Center(
-        child: Text('No properties match your search.'),
+        child: Text('No rooms match your search or filter.'),
       );
     }
 
-    return ListView.separated(
-      itemCount: filteredRooms.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 12),
-      itemBuilder: (context, index) {
-        final room = filteredRooms[index];
+    return RefreshIndicator(
+      onRefresh: _loadRooms,
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: filteredRooms.length,
+        separatorBuilder: (_, _) =>
+            const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final room = filteredRooms[index];
 
-        return _PropertyCard(
-          title: room.title,
-          details:
-              '${room.suburb}\n'
-              '${room.bedrooms} beds • ${room.bathrooms} bath\n'
-              'R${room.monthlyRent.toString().replaceAllMapped(
-                RegExp(r'(?=(\d{3})+$)'),
-                (_) => ',',
-              )}',
-          status: room.status,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const RoomDetailsScreen(),
-              ),
-            );
-          },
-        );
-      },
+          final details = [
+            room.roomType,
+            'Room ${room.roomNumber}',
+            'R${room.price} per month',
+            if (room.description.isNotEmpty)
+              room.description,
+            if (room.amenities.isNotEmpty)
+              'Amenities: ${room.amenities.join(', ')}',
+          ].join('\n');
+
+          return _PropertyCard(
+            title: room.roomType,
+            details: details,
+            status: room.availability,
+            onTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => RoomDetailsScreen(room: room),
+    ),
+  );
+},
+          );
+        },
+      ),
     );
   }
 }
+
 class _PropertyCard extends StatelessWidget {
   final String title;
   final String details;
@@ -187,6 +286,9 @@ class _PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isAvailable =
+        status.trim().toLowerCase() == 'available';
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -233,13 +335,14 @@ class _PropertyCard extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 4,
               ),
               decoration: BoxDecoration(
-                color: status == 'Available'
+                color: isAvailable
                     ? Colors.green
                     : Colors.orange,
                 borderRadius: BorderRadius.circular(12),

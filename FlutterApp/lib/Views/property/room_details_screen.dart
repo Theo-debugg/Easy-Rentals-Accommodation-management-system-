@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:easy_rentals_mobile_app/Models/room.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/custom_bottom_nav.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/custom_button.dart';
@@ -7,14 +9,60 @@ import 'package:easy_rentals_mobile_app/Views/dashboard/main_shell.dart';
 import 'package:easy_rentals_mobile_app/Views/enquiries/send_enquiry_screen.dart';
 
 class RoomDetailsScreen extends StatelessWidget {
-  const RoomDetailsScreen({super.key});
+  final Room room;
+
+  const RoomDetailsScreen({
+    super.key,
+    required this.room,
+  });
+
+  String get _roomTitle {
+    final type = room.roomType.trim();
+    final number = room.roomNumber.trim();
+
+    if (type.isEmpty && number.isEmpty) return 'Room details';
+    if (type.isEmpty) return 'Room $number';
+    if (number.isEmpty) return type;
+
+    return '$type — Room $number';
+  }
+
+  String get _formattedPrice {
+    final price = room.price;
+    final value = price.toStringAsFixed(2);
+    final parts = value.split('.');
+    final wholeNumber = parts[0];
+    final decimals = parts.length > 1 ? parts[1] : '00';
+
+    final formattedWholeNumber = wholeNumber.replaceAllMapped(
+      RegExp(r'\B(?=(\d{3})+(?!\d))'),
+      (_) => ',',
+    );
+
+    final formattedDecimals =
+        decimals == '00' ? '' : '.$decimals';
+
+    return 'R$formattedWholeNumber$formattedDecimals per month';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final description = room.description.trim();
+    final amenities = room.amenities;
+    final availability = room.availability.trim().isEmpty
+        ? 'Unknown'
+        : room.availability.trim();
+
+    final isAvailable =
+        availability.toLowerCase() == 'available';
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Room details', style: TextStyle(fontSize: 16)),
+        title: const Text(
+          'Room details',
+          style: TextStyle(fontSize: 16),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -23,47 +71,115 @@ class RoomDetailsScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 180,
+              width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[400],
+                color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Center(
-                child: Icon(Icons.image, size: 64, color: Colors.white54),
+                child: Icon(
+                  Icons.meeting_room_outlined,
+                  size: 64,
+                  color: Colors.white,
+                ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Easy Rental Student\nAccommodation',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+            Text(
+              _roomTitle,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 4),
-            const Text(
-              'R3,500 month',
-              style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+            const SizedBox(height: 8),
+
+            Text(
+              _formattedPrice,
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppTheme.textSecondary,
+              ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Park Road, Bloemfontein',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Description',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Single bedroom, self catering with kitchen area. '
-              'Free Wi-Fi. Laundry. Security.',
-              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: isAvailable
+                    ? Colors.green.withValues(alpha: 0.12)
+                    : Colors.orange.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                availability,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: isAvailable
+                      ? Colors.green[800]
+                      : Colors.orange[900],
+                ),
+              ),
             ),
             const SizedBox(height: 24),
+
+            const Text(
+              'Description',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            Text(
+              description.isNotEmpty
+                  ? description
+                  : 'No description has been added for this room yet.',
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppTheme.textSecondary,
+              ),
+            ),
+
+            if (amenities.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              const Text(
+                'Amenities',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: amenities.map((amenity) {
+                  return Chip(
+                    avatar: const Icon(
+                      Icons.check_circle_outline,
+                      size: 18,
+                    ),
+                    label: Text(amenity),
+                  );
+                }).toList(),
+              ),
+            ],
+
+            const SizedBox(height: 28),
+
             Row(
               children: [
                 Expanded(
@@ -73,9 +189,10 @@ class RoomDetailsScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const BookingAppointmentScreen(
-                            propertyTitle: 'Easy Rental Student Accommodation',
-                            propertyAddress: 'Park Road, Bloemfontein',
+                          builder: (_) => BookingAppointmentScreen(
+                            propertyTitle: _roomTitle,
+                            propertyAddress:
+                                'Property ID: ${room.propertyId}',
                           ),
                         ),
                       );
@@ -91,9 +208,8 @@ class RoomDetailsScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const SendEnquiryScreen(
-                            initialSubject:
-                                'Enquiry about Easy Rental Student Accommodation',
+                          builder: (_) => SendEnquiryScreen(
+                            initialSubject: 'Enquiry about $_roomTitle',
                           ),
                         ),
                       );
