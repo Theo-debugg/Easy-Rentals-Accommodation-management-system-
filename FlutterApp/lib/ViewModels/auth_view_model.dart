@@ -1,5 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:easy_rentals_mobile_app/models/student.dart';
+import 'package:easy_rentals_mobile_app/Models/student.dart';
 
 /// Owns authentication and account operations; widgets only collect input and render state.
 class AuthViewModel {

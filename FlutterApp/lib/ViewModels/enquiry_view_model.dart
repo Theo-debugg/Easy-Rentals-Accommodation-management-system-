@@ -1,4 +1,4 @@
-import 'package:easy_rentals_mobile_app/models/enquiry.dart';
+import 'package:easy_rentals_mobile_app/Models/enquiry.dart';
 
 /// Keeps enquiry validation/state out of the UI. This remains local until an
 /// enquiries table and its access policies are configured in Supabase.
