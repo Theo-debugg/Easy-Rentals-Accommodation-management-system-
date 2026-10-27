@@ -146,6 +146,38 @@ namespace EasyRentalsStaff.Controllers
             return View(model);
         }
 
+        //GET: Rooms/Details/
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var token = HttpContext.Session.Token();
+
+            // Fetch the specific room from Supabase
+            var rooms = await _supabase.SelectAsync<Room>(token, "room", $"select=*&id=eq.{id}");
+            var room = rooms.FirstOrDefault();
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            // Map database model to ViewModel
+            var model = new RoomViewModel
+            {
+                Id = room.Id,
+                PropertyId = room.PropertyId,
+                RoomNumber = room.RoomNumber,
+                RoomType = room.RoomType,
+                Price = room.Price,
+                Description = room.Description,
+                Availability = room.Availability ?? "Available",
+                HasWiFi = room.Amenities?.Contains("Wi-Fi") ?? false,
+                HasPool = room.Amenities?.Contains("Pool") ?? false,
+                HasParking = room.Amenities?.Contains("Parking") ?? false,
+                HasLaundry = room.Amenities?.Contains("Laundry") ?? false,
+            };
+
+            return View(model);
+        }
         private string GetSelectedAmenities(RoomViewModel model)
         {
             var amenities = new List<string>();

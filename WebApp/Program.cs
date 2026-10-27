@@ -1,6 +1,7 @@
 using EasyRentalsStaff.Filters;
 using EasyRentalsStaff.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddScoped<IFeedbackService, SupabaseFeedbackService>();
 
 var app = builder.Build();
 
