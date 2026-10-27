@@ -186,17 +186,17 @@ class RoomDetailsScreen extends StatelessWidget {
                   child: CustomButton(
                     text: 'Request Viewing',
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => BookingAppointmentScreen(
-                            propertyTitle: _roomTitle,
-                            propertyAddress:
-                                'Property ID: ${room.propertyId}',
-                          ),
-                        ),
-                      );
-                    },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => BookingAppointmentScreen(
+        propertyTitle: _roomTitle,
+        propertyAddress: 'Property ID: ${room.propertyId}',
+        propertyId: room.propertyId,
+      ),
+    ),
+  );
+},
                   ),
                 ),
                 const SizedBox(width: 12),
