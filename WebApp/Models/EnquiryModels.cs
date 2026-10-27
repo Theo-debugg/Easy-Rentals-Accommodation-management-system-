@@ -16,6 +16,7 @@ public record EnquiryRow(
     string? Message,          // the student's first message
     string? Status,
     DateTimeOffset CreatedAt,
+    [property: JsonPropertyName("student_id")] Guid? StudentId,
     [property: JsonPropertyName("student")] StudentRef? Student);
 
 // A row of the "enquiry_messages" table. A message with a staff_id was written by

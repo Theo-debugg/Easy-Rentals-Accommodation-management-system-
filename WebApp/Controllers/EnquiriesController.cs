@@ -8,7 +8,7 @@ public class EnquiriesController : Controller
 {
     // If your Supabase table or column names differ, these three lines are the only
     // place in the controller that needs to change (plus the records in EnquiryModels.cs).
-    private const string EnquirySelect = "ReferenceNo,subject,message,status,created_at,student(full_name,email)";
+    private const string EnquirySelect = "ReferenceNo,subject,message,status,created_at,student_id,student(full_name,email)";
     private const string MessageSelect = "message,staff_id,created_at";
     private const string MessageColumn = "message";
     private const string MessageLinkColumn = "enquiry_ReferenceNo";
@@ -58,6 +58,7 @@ public class EnquiriesController : Controller
             {
                 [MessageLinkColumn] = id,
                 ["staff_id"] = HttpContext.Session.StaffId(),
+                ["student_id"] = enquiry.StudentId!,
                 [MessageColumn] = text
             });
 
