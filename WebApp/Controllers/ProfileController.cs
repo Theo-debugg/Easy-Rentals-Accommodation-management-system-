@@ -18,7 +18,7 @@ public class ProfileController : Controller
         var id = HttpContext.Session.StaffId();
 
         var staff = (await _supabase.SelectAsync<ProfileRow>(token, "staff",
-            $"id=eq.{id}&select=id,full_name,email,role")).FirstOrDefault();
+            $"id=eq.{id}&select=id,full_name,email")).FirstOrDefault();
 
         if (staff is null)
             return RedirectToAction("Logout", "Account");

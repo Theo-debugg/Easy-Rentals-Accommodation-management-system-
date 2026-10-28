@@ -85,8 +85,7 @@ public class ViewingRequestsController : Controller
     }
 
     // POST /ViewingRequests/Decide   (id = the request, decision = approved | declined)
-    // NOTE: any signed-in staff member can decide for now. If only managers should
-    // approve or decline, check the staff role here before updating.
+    // Any signed-in staff member can decide for now.
     [HttpPost]
     public async Task<IActionResult> Decide(string id, string decision)
     {

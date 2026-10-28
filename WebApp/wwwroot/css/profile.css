@@ -14,7 +14,6 @@
   border: 5px solid #f4f2ee; display: grid; place-items: center; font-size: 38px; font-weight: 700;
 }
 .pf-head h1 { margin: 0 0 8px; font-size: 30px; }
-.pf-chip { display: inline-block; background: var(--brand-soft); color: #4a1bb5; font-weight: 600; font-size: 14px; padding: 7px 14px; border-radius: 999px; }
 .pf-ok { display: inline-block; background: #e6f4ea; color: #1b5e32; font-weight: 600; font-size: 13px; padding: 6px 12px; border-radius: 999px; margin-left: 6px; }
 
 .pf-card { background: #fff; box-shadow: 0 10px 32px rgba(30, 20, 60, .08); padding: 26px; margin-bottom: 24px; border-radius: 6px; }
