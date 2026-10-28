@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:easy_rentals_mobile_app/Models/room.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
@@ -14,6 +15,7 @@ class PropertiesTab extends StatefulWidget {
 class _PropertiesTabState extends State<PropertiesTab> {
   int _selectedFilter = 0;
   final List<String> _filters = ['Available', 'Occupied'];
+
   final TextEditingController _searchController =
       TextEditingController();
 
@@ -118,9 +120,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             }),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: _buildContent(),
-          ),
+          Expanded(child: _buildContent()),
         ],
       ),
     );
@@ -237,10 +237,11 @@ class _PropertiesTabState extends State<PropertiesTab> {
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: filteredRooms.length,
-        separatorBuilder: (_, _) =>
-            const SizedBox(height: 12),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
           final room = filteredRooms[index];
+          debugPrint('ROOM: ${room.roomNumber}');
+           debugPrint('PHOTO URL: ${room.photoUrl}');
 
           final details = [
             room.roomType,
@@ -256,14 +257,15 @@ class _PropertiesTabState extends State<PropertiesTab> {
             title: room.roomType,
             details: details,
             status: room.availability,
+            photoUrl: room.photoUrl,
             onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => RoomDetailsScreen(room: room),
-    ),
-  );
-},
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RoomDetailsScreen(room: room),
+                ),
+              );
+            },
           );
         },
       ),
@@ -275,12 +277,14 @@ class _PropertyCard extends StatelessWidget {
   final String title;
   final String details;
   final String status;
+  final String? photoUrl;
   final VoidCallback onTap;
 
   const _PropertyCard({
     required this.title,
     required this.details,
     required this.status,
+    required this.photoUrl,
     required this.onTap,
   });
 
@@ -298,18 +302,14 @@ class _PropertyCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.meeting_room_outlined,
-                size: 32,
-                color: Colors.white,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: _buildRoomImage(),
               ),
             ),
             const SizedBox(width: 16),
@@ -357,6 +357,49 @@ class _PropertyCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildRoomImage() {
+    final url = photoUrl?.trim();
+
+    if (url == null || url.isEmpty) {
+      return _imagePlaceholder();
+    }
+
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+      width: 80,
+      height: 80,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+
+        return Container(
+          color: Colors.grey.shade200,
+          alignment: Alignment.center,
+          child: const SizedBox(
+            width: 22,
+            height: 22,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return _imagePlaceholder();
+      },
+    );
+  }
+
+  Widget _imagePlaceholder() {
+    return Container(
+      color: Colors.grey.shade400,
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.meeting_room_outlined,
+        size: 32,
+        color: Colors.white,
       ),
     );
   }
