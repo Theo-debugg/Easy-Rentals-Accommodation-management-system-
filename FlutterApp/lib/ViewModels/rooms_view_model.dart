@@ -1,3 +1,4 @@
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:easy_rentals_mobile_app/Models/room.dart';
 
@@ -7,16 +8,32 @@ class RoomsViewModel {
   Future<List<Room>> fetchRooms() async {
     final response = await Supabase.instance.client
         .from('room')
-        .select()
+        .select('''
+          *,
+          room_photo (
+            id,
+            photo_url,
+            created_at
+          )
+        ''')
         .order('updated_at', ascending: false);
 
-    return (response as List)
-        .map(
-          (row) => Room.fromMap(
-            Map<String, dynamic>.from(row as Map),
-          ),
-        )
-        .toList();
+    final rows = response as List;
+
+    final rooms = rows.map((row) {
+      final roomMap = Map<String, dynamic>.from(row as Map);
+      final room = Room.fromMap(roomMap);
+
+      // Temporary debugging: check whether photos reach Flutter.
+      print(
+        'ROOM: ${room.roomNumber} | '
+        'PHOTO URL: ${room.photoUrl}',
+      );
+
+      return room;
+    }).toList();
+
+    return rooms;
   }
 
   List<Room> filter(

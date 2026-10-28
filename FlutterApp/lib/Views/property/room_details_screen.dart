@@ -7,6 +7,7 @@ import 'package:easy_rentals_mobile_app/Views/shared/custom_button.dart';
 import 'package:easy_rentals_mobile_app/Views/property/booking_appointment_screen.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/main_shell.dart';
 import 'package:easy_rentals_mobile_app/Views/enquiries/send_enquiry_screen.dart';
+//import 'package:easy_rentals_mobile_app/Widgets/room_photo_slider.dart';
 
 class RoomDetailsScreen extends StatelessWidget {
   final Room room;
@@ -45,10 +46,53 @@ class RoomDetailsScreen extends StatelessWidget {
     return 'R$formattedWholeNumber$formattedDecimals per month';
   }
 
+  Widget _buildRoomImage() {
+    final url = room.photoUrl?.trim();
+
+    if (url == null || url.isEmpty) {
+      return _imagePlaceholder();
+    }
+
+    return Image.network(
+      url,
+      width: double.infinity,
+      height: 220,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+
+        return Container(
+          height: 220,
+          color: Colors.grey.shade200,
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return _imagePlaceholder();
+      },
+    );
+  }
+
+  Widget _imagePlaceholder() {
+    return Container(
+      height: 220,
+      width: double.infinity,
+      color: Colors.grey.shade300,
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.meeting_room_outlined,
+        size: 64,
+        color: Colors.white,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final description = room.description.trim();
     final amenities = room.amenities;
+
     final availability = room.availability.trim().isEmpty
         ? 'Unknown'
         : room.availability.trim();
@@ -75,19 +119,12 @@ class RoomDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.meeting_room_outlined,
-                  size: 64,
-                  color: Colors.white,
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 220,
+                child: _buildRoomImage(),
               ),
             ),
             const SizedBox(height: 16),
@@ -186,17 +223,18 @@ class RoomDetailsScreen extends StatelessWidget {
                   child: CustomButton(
                     text: 'Request Viewing',
                     onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => BookingAppointmentScreen(
-        propertyTitle: _roomTitle,
-        propertyAddress: 'Property ID: ${room.propertyId}',
-        propertyId: room.propertyId,
-      ),
-    ),
-  );
-},
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BookingAppointmentScreen(
+                            propertyTitle: _roomTitle,
+                            propertyAddress:
+                                'Property ID: ${room.propertyId}',
+                            propertyId: room.propertyId,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -209,7 +247,8 @@ class RoomDetailsScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => SendEnquiryScreen(
-                            initialSubject: 'Enquiry about $_roomTitle',
+                            initialSubject:
+                                'Enquiry about $_roomTitle',
                           ),
                         ),
                       );
