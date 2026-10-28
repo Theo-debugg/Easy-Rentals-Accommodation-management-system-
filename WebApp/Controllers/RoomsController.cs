@@ -39,7 +39,6 @@ namespace EasyRentalsStaff.Controllers
             ViewBag.TotalRooms = rooms.Count;
             ViewBag.AvailableRooms = rooms.Count(r => r.Availability == "Available");
             ViewBag.OccupiedRooms = rooms.Count(r => r.Availability == "Occupied");
-            ViewBag.MaintenanceRooms = rooms.Count(r => r.Availability == "Maintenance");
 
             return View(rooms);
         }
@@ -187,6 +186,43 @@ namespace EasyRentalsStaff.Controllers
             };
 
             return View(model);
+        }
+
+        // POST: Rooms/Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var token = HttpContext.Session.Token();
+
+            var room = (await _supabase.SelectAsync<Room>(
+                token, "room", $"select=id&id=eq.{id}")).FirstOrDefault();
+
+            if (room is null)
+                return NotFound();
+
+            try
+            {
+                var photos = await LoadPhotosAsync(token, id);
+
+                foreach (var photo in photos)
+                {
+                    var path = SupabaseService.PathFromPublicUrl(photo.PhotoUrl);
+                    if (path != null)
+                        await _supabase.DeleteRoomPhotoAsync(token, path);
+                }
+
+                if (photos.Count > 0)
+                    await _supabase.DeleteAsync(token, "room_photo", $"room_id=eq.{id}");
+
+                await _supabase.DeleteAsync(token, "room", $"id=eq.{id}");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (SupabaseException ex)
+            {
+                TempData["Error"] = $"Unable to delete the room: {ex.Message}";
+                return RedirectToAction(nameof(Details), new { id });
+            }
         }
         // ---- Room photos (Supabase Storage bucket "room-photos" + table "room_photo") ----
 

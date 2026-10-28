@@ -150,11 +150,6 @@
         color: #dba23e;
     }
 
-    .room-status.maintenance {
-        background: #fce8e9;
-        color: #d96b70;
-    }
-
 /* Buttons */
 .btn-cancel {
     padding: 10px 20px;

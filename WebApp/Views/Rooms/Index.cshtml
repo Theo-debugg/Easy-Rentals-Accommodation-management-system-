@@ -46,14 +46,6 @@
             <div class="summary-description">Currently in use</div>
         </div>
 
-        <div class="summary-card">
-            <div class="summary-card-top">
-                <span>Maintenance</span>
-                <span class="summary-indicator declined-indicator"></span>
-            </div>
-            <div class="summary-number">@ViewBag.MaintenanceRooms</div>
-            <div class="summary-description">Under repair</div>
-        </div>
     </div>
 
     <!-- Search and filters -->
@@ -73,7 +65,6 @@
             <option value="">All Statuses</option>
             <option value="Available">Available</option>
             <option value="Occupied">Occupied</option>
-            <option value="Maintenance">Maintenance</option>
         </select>
         
         <button type="submit" class="btn-search">Filter</button>
@@ -123,6 +114,11 @@
                             <div class="room-actions">
                                 <a asp-action="Edit" asp-route-id="@room.Id" class="btn-action">Edit</a>
                                 <a asp-action="Details" asp-route-id="@room.Id" class="btn-action">View</a>
+                                <form asp-action="Delete" asp-route-id="@room.Id" method="post" class="room-delete-form"
+                                      onsubmit="return confirm('Delete room @room.RoomNumber? This action cannot be undone.');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action room-delete-button">Delete</button>
+                                </form>
                             </div>
                         </div>
                     }

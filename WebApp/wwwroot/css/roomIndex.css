@@ -272,6 +272,11 @@
         margin-top: auto;
     }
 
+    .rooms-page .room-delete-form {
+        flex: 1;
+        margin: 0;
+    }
+
     .rooms-page .btn-action {
         flex: 1;
         text-align: center;
@@ -291,6 +296,11 @@
             background: #f1f5f9;
         }
 
+    .rooms-page .room-delete-button {
+        width: 100%;
+        color: #b42318;
+    }
+
     /* Status Badges */
     .rooms-page .room-status {
         padding: 4px 8px;
@@ -309,11 +319,6 @@
         .rooms-page .room-status.occupied {
             background: #fdf4e6;
             color: #dba23e;
-        }
-
-        .rooms-page .room-status.maintenance {
-            background: #fce8e9;
-            color: #d96b70;
         }
 
     /* Empty State */
