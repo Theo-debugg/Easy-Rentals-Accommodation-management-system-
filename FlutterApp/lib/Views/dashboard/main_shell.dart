@@ -130,7 +130,7 @@ class MainShellState extends State<MainShell> {
               ),
             ),
 
-            IconButton(
+            /*IconButton(
               tooltip: 'Notifications',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -143,7 +143,7 @@ class MainShellState extends State<MainShell> {
                 Icons.notifications_none,
                 color: AppTheme.textSecondary,
               ),
-            ),
+            ),*/
 
             IconButton(
               tooltip: 'Profile',
