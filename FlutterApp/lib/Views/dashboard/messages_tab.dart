@@ -453,63 +453,95 @@ Future<void> _loadMessages() async {
     );
   }
 
-  Widget _buildMessageBubble(
-    Map<String, dynamic> message,
-    String currentUserId,
-  ) {
-    final senderId = message['student_id']?.toString();
+  
+  
+Widget _buildMessageBubble(
+  Map<String, dynamic> message,
+  String currentUserId,
+) {
+  final senderId = message['student_id']?.toString();
+  final staffId = message['staff_id']?.toString();
 
-final isOriginal =
-    message['is_original_enquiry'] == true;
+  final isOriginal = message['is_original_enquiry'] == true;
 
-final isStudent = isOriginal || senderId == currentUserId;
+  final isStaff = !isOriginal &&
+      staffId != null &&
+      staffId.trim().isNotEmpty;
 
-    final text = (message['message'] ?? '').toString();
-    final date = _formatDate(message['created_at']);
+  final isStudent = isOriginal ||
+      (!isStaff && senderId == currentUserId);
 
-    return Align(
-      alignment:
-          isStudent ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 320),
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isStudent ? AppTheme.cardColor : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+  final text = (message['message'] ?? '').toString();
+  final date = _formatDate(message['created_at']);
+
+  // Easy Rentals brand colours
+  const purple = Color(0xFF6428D9);
+  const lightGreen = Color(0xFFF1F7EC);
+
+  final alignment = isStudent
+      ? Alignment.centerRight
+      : Alignment.centerLeft;
+
+  final bubbleColor = isStudent ? purple : lightGreen;
+  final messageTextColor =
+      isStudent ? Colors.white : const Color(0xFF26351E);
+  final timestampColor =
+      isStudent ? const Color(0xFFE8DEFF) : const Color(0xFF64745A);
+
+  final senderLabel = isOriginal
+      ? 'Original enquiry'
+      : isStaff
+          ? 'Easy Rentals Staff'
+          : isStudent
+              ? 'You'
+              : 'Sender unknown';
+
+  return Align(
+    alignment: alignment,
+    child: Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.78,
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: bubbleColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            senderLabel,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: messageTextColor,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            text,
+            style: TextStyle(
+              color: messageTextColor,
+            ),
+          ),
+          if (date.isNotEmpty) ...[
+            const SizedBox(height: 6),
             Text(
-             isOriginal
-    ? 'Original enquiry'
-    : isStudent
-        ? 'You'
-        : 'Easy Rental Staff',
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
+              date,
+              style: TextStyle(
+                fontSize: 10,
+                color: timestampColor,
               ),
             ),
-            const SizedBox(height: 5),
-            Text(text),
-            if (date.isNotEmpty) ...[
-              const SizedBox(height: 6),
-              Text(
-                date,
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Colors.black54,
-                ),
-              ),
-            ],
           ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildConversation() {
     final enquiry = _selectedEnquiry!;
