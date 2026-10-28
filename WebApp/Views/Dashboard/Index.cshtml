@@ -3,10 +3,64 @@
     var name = Context.Session.StaffName();
 }
 
-<section class="welcome-card">
-    <div class="eyebrow">Staff dashboard</div>
-    <h1>Welcome back, @name</h1>
-    <p class="muted">You are signed in to the Easy Rentals staff portal.</p>
-</section>
+<div class="dashboard-page">
+    <section class="welcome-card">
+        <div class="eyebrow">EASY RENTALS · STAFF PORTAL</div>
+        <h1>Welcome back, @name!</h1>
+        <p class="muted">
+            Manage accommodation, viewing requests and student enquiries
+            from one place.
+        </p>
+    </section>
+
+    <section class="dashboard-section">
+        <h2>Overview</h2>
+        <p class="muted">Your accommodation management at a glance.</p>
+
+        <div class="dashboard-cards">
+            <article class="dashboard-card">
+                <div class="card-icon">VIEWINGS</div>
+                <h3>Viewing Requests</h3>
+                <p>Manage student viewing requests.</p>
+                <a asp-controller="ViewingRequests"
+                   asp-action="Index">View requests &rarr;</a>
+            </article>
+
+            <article class="dashboard-card">
+                <div class="card-icon">FEEDBACK</div>
+                <h3>Feedback</h3>
+                <p>View student feedback and reviews.</p>
+                <a asp-controller="Feedback"
+                   asp-action="Index">View feedback &rarr;</a>
+            </article>
+
+            <article class="dashboard-card">
+                <div class="card-icon">ROOMS</div>
+                <h3>Rooms</h3>
+                <p>Manage rooms and their availability.</p>
+                <a asp-controller="Rooms"
+                   asp-action="Index">View rooms &rarr;</a>
+            </article>
+
+            <article class="dashboard-card">
+                <div class="card-icon">ENQUIRIES</div>
+                <h3>Enquiries</h3>
+                <p>Review student enquiries and messages.</p>
+                <a asp-controller="Enquiries"
+                   asp-action="Index">View enquiries &rarr;</a>
+            </article>
+        </div>
+    </section>
+
+    <section class="dashboard-section">
+        <h2>Quick reminder</h2>
+        <div class="reminder-card">
+            <p>
+                Keep viewing request statuses up to date and ensure that
+                student enquiries receive appropriate attention.
+            </p>
+        </div>
+    </section>
+</div>
 
 

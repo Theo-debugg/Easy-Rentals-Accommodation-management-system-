@@ -19,6 +19,7 @@ public class SupabaseService
     private readonly HttpClient _http;
     private readonly string _url;
     private readonly string _key;
+    private readonly string _roomPhotosBucket;
 
     public static readonly JsonSerializerOptions Json = new()
     {
@@ -29,8 +30,11 @@ public class SupabaseService
     public SupabaseService(HttpClient http, IConfiguration config)
     {
         _http = http;
-        _url = (config["Supabase:Url"] ?? throw new InvalidOperationException("Supabase:https://dfejwzbblubfcxywcnhr.supabase.co")).TrimEnd('/');
-        _key = config["Supabase:PublishableKey"] ?? throw new InvalidOperationException("Supabase:sb_publishable_IzdZ_ZDmc06oPhtHwre9fg_VcPXYGup");
+        _url = (config["Supabase:Url"] ?? throw new InvalidOperationException("Supabase:Url is missing in appsettings.json")).TrimEnd('/');
+        _key = config["Supabase:PublishableKey"] ?? throw new InvalidOperationException("Supabase:PublishableKey is missing in appsettings.json");
+        _roomPhotosBucket = config["Supabase:RoomPhotosBucket"] ?? "room-photos";
+        if (string.IsNullOrWhiteSpace(_roomPhotosBucket) || _roomPhotosBucket.Any(char.IsWhiteSpace))
+            throw new InvalidOperationException("Supabase:RoomPhotosBucket must be a non-empty bucket name without spaces.");
     }
 
     private HttpRequestMessage Build(HttpMethod method, string path, string? token, HttpContent? content = null)
@@ -101,12 +105,60 @@ public class SupabaseService
         return JsonSerializer.Deserialize<List<T>>(body, Json) ?? new List<T>();
     }
 
+    public async Task InsertAsync(string token, string table, object row)
+    {
+        var req = Build(HttpMethod.Post, $"/rest/v1/{table}", token, JsonBody(row));
+        req.Headers.Add("Prefer", "return=minimal");
+        using var res = await _http.SendAsync(req);
+        await ReadOrThrow(res);
+    }
+
     public async Task UpdateAsync(string token, string table, string filter, object changes)
     {
         var req = Build(HttpMethod.Patch, $"/rest/v1/{table}?{filter}", token, JsonBody(changes));
         req.Headers.Add("Prefer", "return=minimal");
         using var res = await _http.SendAsync(req);
         await ReadOrThrow(res);
+    }
+
+    public async Task DeleteAsync(string token, string table, string filter)
+    {
+        using var res = await _http.SendAsync(Build(HttpMethod.Delete, $"/rest/v1/{table}?{filter}", token));
+        await ReadOrThrow(res);
+    }
+
+    // ---- Storage (room photos) ----------------------------------------
+
+    /// Uploads a file to the public "room-photos" bucket and returns its public URL.
+    public async Task<string> UploadRoomPhotoAsync(string token, string path, byte[] bytes, string contentType)
+    {
+        var content = new ByteArrayContent(bytes);
+        content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
+        using var res = await _http.SendAsync(Build(
+            HttpMethod.Post, $"/storage/v1/object/{_roomPhotosBucket}/{path}", token, content));
+        await ReadOrThrow(res);
+
+        return $"{_url}/storage/v1/object/public/{_roomPhotosBucket}/{path}";
+    }
+
+    /// Deletes a file from the "room-photos" bucket (path = the path inside the bucket).
+    public async Task DeleteRoomPhotoAsync(string token, string path)
+    {
+        using var res = await _http.SendAsync(Build(
+            HttpMethod.Delete, $"/storage/v1/object/{_roomPhotosBucket}/{path}", token));
+        await ReadOrThrow(res);
+    }
+
+    /// Turns ".../storage/v1/object/public/room-photos/<path>" back into "<path>".
+    public static string? PathFromPublicUrl(string url)
+    {
+        const string marker = "/object/public/";
+        var i = url.IndexOf(marker, StringComparison.Ordinal);
+        if (i < 0) return null;
+        var objectPath = url[(i + marker.Length)..];
+        var slash = objectPath.IndexOf('/');
+        return slash < 0 ? null : Uri.UnescapeDataString(objectPath[(slash + 1)..]);
     }
 }
 

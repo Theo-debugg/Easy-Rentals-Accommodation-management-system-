@@ -1,0 +1,145 @@
+﻿@model EasyRentalsStaff.ViewModel.RoomViewModel
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/roomDetail.css" asp-append-version="true" />
+}
+
+<div class="rooms-page">
+    <!-- Header -->
+    <div class="page-heading mb-4">
+        <div>
+            <div class="text-muted small mb-2 fw-bold" style="letter-spacing: 0.5px; text-transform: uppercase;">
+                Rooms > @Model.RoomNumber > Details
+            </div>
+            <h2>Room Details</h2>
+            <p>Complete information for @Model.RoomNumber.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Index" class="btn-cancel">Back to Rooms</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-save" style="text-decoration: none;">Edit Room</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column (Data) -->
+        <div class="col-lg-8">
+
+            <!-- Basic Info Panel -->
+            <div class="form-panel">
+                <h5>Basic Information</h5>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="details-label">Room Number</span>
+                        <span class="details-value">@Model.RoomNumber</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="details-label">Room Type</span>
+                        <span class="details-value">@(string.IsNullOrEmpty(Model.RoomType) ? "Not specified" : Model.RoomType)</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="details-label">Current Status</span>
+                        <span>
+                            <span class="room-status @(Model.Availability?.ToLower() ?? "available")">
+                                @Model.Availability
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="details-label">Monthly Rent</span>
+                        <span class="details-value price-text">R @Model.Price</span>
+                    </div>
+                </div>
+
+                <div class="details-row mt-3">
+                    <span class="details-label">Description</span>
+                    <span class="details-value description-text">
+                        @(string.IsNullOrEmpty(Model.Description) ? "No description provided for this room." : Model.Description)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Amenities Panel -->
+            <div class="form-panel mb-0">
+                <h5>Amenities & Features</h5>
+                <div class="amenities-list">
+                    @if (Model.HasWiFi)
+                    {
+                        <span class="amenity-tag">📶 Wi-Fi</span>
+                    }
+                    @if (Model.HasPool)
+                    {
+                        <span class="amenity-tag">🏊 Swimming Pool</span>
+                    }
+                    @if (Model.HasParking)
+                    {
+                        <span class="amenity-tag">🚗 Parking Space</span>
+                    }
+                    @if (Model.HasLaundry)
+                    {
+                        <span class="amenity-tag">👕 Laundry Area</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column (System Info & Photos) -->
+        <div class="col-lg-4">
+
+            <!-- Photos Placeholder -->
+            <div class="form-panel">
+                <h5>Room Photos</h5>
+                @if (Model.Photos.Any())
+                {
+                    <div class="row g-2">
+                        @foreach (var p in Model.Photos)
+                        {
+                            <div class="col-6">
+                                <a href="@p.PhotoUrl" target="_blank" rel="noopener">
+                                    <img src="@p.PhotoUrl" alt="Room photo" style="width:100%;height:140px;object-fit:contain;background:#f8fafc;border-radius:7px;" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5" style="background: #f8fafc; border-radius: 7px; border: 1px dashed #cbd5e1;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="margin-bottom: 10px;"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>
+                        <p class="text-muted mb-0" style="font-size: 13px;">No photos uploaded yet</p>
+                    </div>
+                }
+            </div>
+
+            <!-- System Info Panel -->
+            <div class="form-panel">
+                <h5>System Information</h5>
+                <ul class="summary-list">
+                    <li>
+                        <span>Property ID</span>
+                        <strong class="text-muted" style="font-family: monospace; font-size: 11px;" title="@Model.PropertyId">
+                            @Model.PropertyId.ToString().Substring(0, 8)...
+                        </strong>
+                    </li>
+                    <li>
+                        <span>Room ID</span>
+                        <strong class="text-muted" style="font-family: monospace; font-size: 11px;" title="@Model.Id">
+                            @Model.Id.ToString().Substring(0, 8)...
+                        </strong>
+                    </li>
+                    <li>
+                        <span>Updated By</span>
+                        <strong>@(Context.Session.GetString("staff_name") ?? "System")</strong>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

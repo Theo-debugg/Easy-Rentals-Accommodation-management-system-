@@ -1,0 +1,130 @@
+﻿@model IEnumerable<EasyRentalsStaff.Models.Room>
+@{
+    ViewData["Title"] = "Rooms";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/roomIndex.css" asp-append-version="true" />
+}
+
+<div class="rooms-page">
+
+    <!-- Page heading -->
+    <div class="page-heading">
+        <div>
+            <h2>Room Dashboard</h2>
+            <p>Convenience at your door step</p>
+        </div>
+        <a asp-action="Add" class="btn-add-room">➕ Add Room</a>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-card-top">
+                <span>Total Rooms</span>
+                <span class="summary-indicator total-indicator"></span>
+            </div>
+            <div class="summary-number">@ViewBag.TotalRooms</div>
+            <div class="summary-description">All registered rooms</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-card-top">
+                <span>Available Rooms</span>
+                <span class="summary-indicator approved-indicator"></span>
+            </div>
+            <div class="summary-number">@ViewBag.AvailableRooms</div>
+            <div class="summary-description">Ready for occupancy</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-card-top">
+                <span>Occupied</span>
+                <span class="summary-indicator pending-indicator"></span>
+            </div>
+            <div class="summary-number">@ViewBag.OccupiedRooms</div>
+            <div class="summary-description">Currently in use</div>
+        </div>
+
+    </div>
+
+    <!-- Search and filters -->
+    <form asp-action="Index" method="get" class="request-toolbar">
+        <div class="search-field">
+            <span class="search-symbol" aria-hidden="true"></span>
+            <input type="search" name="searchString" placeholder="Search by room..." value="@Context.Request.Query["searchString"]" aria-label="Search rooms" />
+        </div>
+
+        <select name="roomTypeFilter" class="filter-control" aria-label="Filter by type">
+            <option value="">All Room Types</option>
+            <option value="Single">Single</option>
+            <option value="Sharing">Sharing</option>
+        </select>
+
+        <select name="statusFilter" class="filter-control" aria-label="Filter by status">
+            <option value="">All Statuses</option>
+            <option value="Available">Available</option>
+            <option value="Occupied">Occupied</option>
+        </select>
+        
+        <button type="submit" class="btn-search">Filter</button>
+    </form>
+
+    <!-- Rooms Panel (using the white card style) -->
+    <div class="requests-panel">
+        <div class="table-heading">
+            <div>
+                <h3>All Rooms</h3>
+                <p>Manage property inventory</p>
+            </div>
+            <span class="request-count">@Model.Count() rooms</span>
+        </div>
+
+        <!-- Grid Layout inside the clean panel -->
+        <div class="rooms-grid-container">
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <div class="empty-state-mark" aria-hidden="true">—</div>
+                    <h4>No rooms found</h4>
+                    <p>Get started by adding a new room to the system.</p>
+                </div>
+            }
+            else
+            {
+                <div class="rooms-grid">
+                    @foreach (var room in Model)
+                    {
+                        <div class="room-card">
+                            <div class="room-card-header">
+                                <span class="room-status @room.Availability?.ToLower()">@room.Availability</span>
+                                <strong>R @room.Price</strong>
+                            </div>
+                            
+                            <h4>@room.RoomNumber</h4>
+                            
+                            <p class="room-details">
+                                @room.RoomType 
+                                @if (!string.IsNullOrEmpty(room.Amenities))
+                                {
+                                    <span> | @room.Amenities.Replace(",", ", ")</span>
+                                }
+                            </p>
+
+                            <div class="room-actions">
+                                <a asp-action="Edit" asp-route-id="@room.Id" class="btn-action">Edit</a>
+                                <a asp-action="Details" asp-route-id="@room.Id" class="btn-action">View</a>
+                                <form asp-action="Delete" asp-route-id="@room.Id" method="post" class="room-delete-form"
+                                      onsubmit="return confirm('Delete room @room.RoomNumber? This action cannot be undone.');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action room-delete-button">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,6 +1,7 @@
 using EasyRentalsStaff.Filters;
 using EasyRentalsStaff.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
+// The Enquiries page posts replies with fetch(), so it sends the anti-forgery token as a header.
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
+
 builder.Services.AddHttpClient<SupabaseService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -18,6 +22,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddScoped<IFeedbackService, SupabaseFeedbackService>();
 
 var app = builder.Build();
 
@@ -30,6 +36,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();      // serves wwwroot (css, js, logo)
 app.UseRouting();
+
+// Sign-in is handled by Supabase + StaffAuthFilter (session based), not by ASP.NET
+// authentication, so UseAuthentication/UseAuthorization are not needed here.
 app.UseSession();
 
 app.MapControllerRoute(

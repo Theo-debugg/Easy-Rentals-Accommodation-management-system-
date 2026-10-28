@@ -11,3 +11,7 @@
 **Technology**
 - ASP.NET Core
 - Supabase
+
+**Enquiries**
+- /Enquiries lists every student enquiry (filter by status, search by student or subject)
+- The Open button slides in a panel with the message thread, a reply box and a Resolve button
