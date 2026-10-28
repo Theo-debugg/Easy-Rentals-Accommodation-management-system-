@@ -1,5 +1,5 @@
-
 class ViewingRequest {
+  final String? id;
   final String propertyTitle;
   final String propertyAddress;
   final String room;
@@ -8,6 +8,7 @@ class ViewingRequest {
   final String status;
 
   const ViewingRequest({
+    this.id,
     required this.propertyTitle,
     required this.propertyAddress,
     required this.room,

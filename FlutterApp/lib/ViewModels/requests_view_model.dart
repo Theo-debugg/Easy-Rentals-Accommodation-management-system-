@@ -4,30 +4,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:easy_rentals_mobile_app/Models/appointment.dart';
 import 'package:easy_rentals_mobile_app/Models/viewing_request.dart';
 
-/// Central place for creating and retrieving viewing requests.
+/// Central place for creating, retrieving, and cancelling viewing requests.
 class RequestsViewModel extends ChangeNotifier {
   RequestsViewModel._();
 
   static final RequestsViewModel instance = RequestsViewModel._();
 
-  final List<ViewingRequest> _requests = [
-    const ViewingRequest(
-      propertyTitle: 'Sunset Student Residence',
-      propertyAddress: 'Blenheim',
-      room: 'Room 4',
-      date: 'Oct 10, 2026',
-      time: '12:00 PM',
-      status: 'Approved',
-    ),
-    const ViewingRequest(
-      propertyTitle: 'Sunset Student Residence',
-      propertyAddress: 'Blenheim',
-      room: 'Room 5, single',
-      date: 'Oct 12, 2026',
-      time: '10:00 AM',
-      status: 'Review',
-    ),
-  ];
+  final List<ViewingRequest> _requests = [];
 
   List<ViewingRequest> get requests => List.unmodifiable(_requests);
 
@@ -57,9 +40,12 @@ class RequestsViewModel extends ChangeNotifier {
       status: appointment.status.toLowerCase(),
     );
 
-    await client
+    // Save the request and retrieve its database ID.
+    final inserted = await client
         .from('viewing_request')
-        .insert(saved.toMap());
+        .insert(saved.toMap())
+        .select('id')
+        .single();
 
     final date = saved.viewingDate;
 
@@ -71,6 +57,7 @@ class RequestsViewModel extends ChangeNotifier {
     _requests.insert(
       0,
       ViewingRequest(
+        id: inserted['id']?.toString(),
         propertyTitle: saved.propertyTitle,
         propertyAddress: saved.propertyAddress,
         room: saved.room,
@@ -100,9 +87,9 @@ class RequestsViewModel extends ChangeNotifier {
       _requests
         ..clear()
         ..addAll((rows as List).map((row) {
-          final appointment = Appointment.fromMap(
-            Map<String, dynamic>.from(row as Map),
-          );
+          final data = Map<String, dynamic>.from(row as Map);
+
+          final appointment = Appointment.fromMap(data);
 
           const months = [
             'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -112,6 +99,7 @@ class RequestsViewModel extends ChangeNotifier {
           final date = appointment.viewingDate;
 
           return ViewingRequest(
+            id: data['id']?.toString(),
             propertyTitle: appointment.propertyTitle,
             propertyAddress: appointment.propertyAddress,
             room: appointment.room,
@@ -126,5 +114,33 @@ class RequestsViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint('Failed to refresh viewing requests: $e');
     }
+  }
+
+  // Cancel/delete a viewing request.
+  Future<void> deleteRequest(String requestId) async {
+    final client = Supabase.instance.client;
+    final user = client.auth.currentUser;
+
+    if (user == null) {
+      throw Exception('Please log in before cancelling a request.');
+    }
+
+    final deleted = await client
+        .from('viewing_request')
+        .delete()
+        .eq('id', requestId)
+        .eq('user_id', user.id)
+        .select('id');
+
+    if ((deleted as List).isEmpty) {
+      throw Exception(
+        'Request could not be cancelled. It may no longer exist '
+        'or you may not have permission to delete it.',
+      );
+    }
+
+    _requests.removeWhere((request) => request.id == requestId);
+
+    notifyListeners();
   }
 }
