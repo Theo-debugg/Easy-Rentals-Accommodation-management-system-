@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EasyRentalsStaff.Models;
 
 namespace EasyRentalsStaff.ViewModel
 {
@@ -37,5 +38,8 @@ namespace EasyRentalsStaff.ViewModel
         public bool HasLaundry { get; set; }
 
         public List<string> ExistingAmenities { get; set; } = new List<string>();
+
+        // Photos already uploaded for this room (read from the room_photo table)
+        public List<RoomPhotoRow> Photos { get; set; } = new();
     }
 }

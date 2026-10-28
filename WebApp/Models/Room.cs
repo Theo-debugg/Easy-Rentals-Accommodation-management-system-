@@ -1,10 +1,4 @@
-﻿using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using ColumnAttribute = Supabase.Postgrest.Attributes.ColumnAttribute;
-using TableAttribute = Supabase.Postgrest.Attributes.TableAttribute;
 
 namespace EasyRentalsStaff.Models
 {
@@ -34,10 +28,14 @@ namespace EasyRentalsStaff.Models
         [JsonPropertyName("amenities")]
         public string? Amenities { get; set; }
 
+        // Nullable: a room row without a timestamp must not break the whole page.
         [JsonPropertyName("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonPropertyName("staff_id")]
         public Guid? StaffId { get; set; }
     }
+
+    // A row of the "room_photo" table (one uploaded picture of a room).
+    public record RoomPhotoRow(Guid Id, string PhotoUrl);
 }

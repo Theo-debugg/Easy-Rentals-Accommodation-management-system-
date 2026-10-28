@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ViewingRequestsViewModel
+@{
     ViewData["Title"] = "Viewing Requests";
 }
 
@@ -12,6 +13,19 @@
         </div>
     </div>
 
+    @if (TempData["Message"] is string okMessage)
+    {
+        <div class="vr-banner vr-ok" role="status">@okMessage</div>
+    }
+    @if (TempData["Error"] is string errMessage)
+    {
+        <div class="vr-banner vr-err" role="alert">@errMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.LoadError))
+    {
+        <div class="vr-banner vr-err" role="alert">Viewing requests could not be loaded: @Model.LoadError</div>
+    }
+
     <!-- Summary cards -->
     <div class="summary-grid">
 
@@ -20,7 +34,7 @@
                 <span>Total Requests</span>
                 <span class="summary-indicator total-indicator"></span>
             </div>
-            <div class="summary-number">0</div>
+            <div class="summary-number">@Model.Total</div>
             <div class="summary-description">All viewing requests</div>
         </div>
 
@@ -29,7 +43,7 @@
                 <span>Pending Requests</span>
                 <span class="summary-indicator pending-indicator"></span>
             </div>
-            <div class="summary-number">0</div>
+            <div class="summary-number">@Model.Pending</div>
             <div class="summary-description">Awaiting a decision</div>
         </div>
 
@@ -38,7 +52,7 @@
                 <span>Approved Requests</span>
                 <span class="summary-indicator approved-indicator"></span>
             </div>
-            <div class="summary-number">0</div>
+            <div class="summary-number">@Model.Approved</div>
             <div class="summary-description">Approved viewings</div>
         </div>
 
@@ -47,33 +61,42 @@
                 <span>Declined Requests</span>
                 <span class="summary-indicator declined-indicator"></span>
             </div>
-            <div class="summary-number">0</div>
+            <div class="summary-number">@Model.Declined</div>
             <div class="summary-description">Declined viewings</div>
         </div>
 
     </div>
 
     <!-- Search and filters -->
-    <div class="request-toolbar">
+    <form method="get" asp-controller="ViewingRequests" asp-action="Index" class="request-toolbar">
         <div class="search-field">
             <span class="search-symbol" aria-hidden="true"></span>
-            <input type="search"
-                   placeholder="Search requests..."
-                   aria-label="Search viewing requests"
-                   disabled />
+            <input type="search" name="q" value="@Model.Q"
+                   placeholder="Search student, email or room..."
+                   aria-label="Search viewing requests" />
         </div>
 
-        <select aria-label="Filter by room"
-                class="filter-control"
-                disabled>
-            <option value="">All Rooms</option>
+        <select name="status" aria-label="Filter by status" class="filter-control">
+            <option value="">All Statuses</option>
+            <option value="pending" selected="@(Model.StatusFilter == "pending")">Pending</option>
+            <option value="approved" selected="@(Model.StatusFilter == "approved")">Approved</option>
+            <option value="declined" selected="@(Model.StatusFilter == "declined")">Declined</option>
         </select>
 
-        <input type="date"
-               aria-label="Filter by date"
-               class="filter-control date-control"
-               disabled />
-    </div>
+        <select name="room" aria-label="Filter by room" class="filter-control">
+            <option value="">All Rooms</option>
+            @foreach (var r in Model.Rooms)
+            {
+                <option value="@r" selected="@(Model.RoomFilter == r)">@r</option>
+            }
+        </select>
+
+        <input type="date" name="date" value="@Model.DateFilter"
+               aria-label="Filter by date" class="filter-control date-control" />
+
+        <button type="submit" class="vr-btn vr-apply">Apply</button>
+        <a asp-action="Index" class="vr-clear">Clear</a>
+    </form>
 
     <!-- Requests table -->
     <div class="requests-panel">
@@ -83,15 +106,15 @@
                 <h3>All Requests</h3>
                 <p>Viewing appointments submitted by students</p>
             </div>
-            <span class="request-count">0 requests</span>
+            <span class="request-count">@Model.Items.Count @(Model.Items.Count == 1 ? "request" : "requests")</span>
         </div>
 
         <div class="table-responsive">
             <table class="requests-table">
                 <thead>
                     <tr>
-                        <th>Student ID</th>
-                        <th>Room ID</th>
+                        <th>Student</th>
+                        <th>Room</th>
                         <th>Date and Time</th>
                         <th>Email</th>
                         <th>Status</th>
@@ -99,22 +122,151 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <div class="empty-state-mark" aria-hidden="true">—</div>
-                                <h4>No viewing requests yet</h4>
-                                <p>New requests will appear here when they become available.</p>
-                            </div>
-                        </td>
-                    </tr>
+                    @if (Model.Items.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-state-mark" aria-hidden="true">&mdash;</div>
+                                    <h4>@(Model.Total == 0 ? "No viewing requests yet" : "No requests match your filters")</h4>
+                                    <p>@(Model.Total == 0 ? "New requests will appear here when students book a viewing in the app." : "Try clearing the search or filters.")</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var r in Model.Items)
+                    {
+                        <tr>
+                            <td><strong>@r.Student</strong></td>
+                            <td class="vr-room-cell">
+                                <span class="vr-room-name">@r.Room</span>
+                                @if (!string.IsNullOrEmpty(r.Property))
+                                {
+                                    <span class="vr-property-name"> · @r.Property</span>
+                                }
+                            </td>
+                            <td class="vr-when-cell">@r.When</td>
+                            <td class="vr-email-cell">@r.Email</td>
+                            <td><span class="vr-status vr-@r.Status">@r.StatusLabel</span></td>
+                            <td class="vr-actions">
+                                <button type="button" class="vr-btn vr-action" data-viewing-action
+                                        data-id="@r.Id" data-student="@r.Student" data-email="@r.Email"
+                                        data-property="@r.Property" data-address="@r.Address" data-room="@r.Room"
+                                        data-when="@r.When" data-status="@r.Status" data-status-label="@r.StatusLabel">
+                                    Action
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
+<div class="vr-backdrop" id="vr-backdrop" hidden></div>
+<aside class="vr-drawer" id="vr-drawer" role="dialog" aria-modal="true"
+       aria-labelledby="vr-drawer-title" aria-hidden="true">
+    <header class="vr-drawer-head">
+        <div>
+            <h2 id="vr-drawer-title">Viewing request</h2>
+            <p id="vr-drawer-status" class="vr-status"></p>
+        </div>
+        <button type="button" class="vr-close" id="vr-close" aria-label="Close">&times;</button>
+    </header>
+    <div class="vr-drawer-body">
+        <dl class="vr-details">
+            <div><dt>Student</dt><dd id="vr-student"></dd></div>
+            <div><dt>Email</dt><dd id="vr-email"></dd></div>
+            <div><dt>Property</dt><dd id="vr-property"></dd></div>
+            <div><dt>Address</dt><dd id="vr-address"></dd></div>
+            <div><dt>Room</dt><dd id="vr-room"></dd></div>
+            <div><dt>Date and time</dt><dd id="vr-when"></dd></div>
+        </dl>
+    </div>
+    <footer class="vr-drawer-actions">
+        <form method="post" asp-controller="ViewingRequests" asp-action="Decide" id="vr-approve-form">
+            <input type="hidden" name="id" id="vr-approve-id" />
+            <input type="hidden" name="decision" value="approved" />
+            <button type="submit" class="vr-btn vr-approve">Approve</button>
+        </form>
+        <form method="post" asp-controller="ViewingRequests" asp-action="Decide" id="vr-decline-form">
+            <input type="hidden" name="id" id="vr-decline-id" />
+            <input type="hidden" name="decision" value="declined" />
+            <button type="submit" class="vr-btn vr-decline">Decline</button>
+        </form>
+    </footer>
+</aside>
+
     </div>
 
 </div>
+
+<style>
+    .vr-banner { padding: 12px 16px; border-radius: 6px; margin: 0 0 16px; font-size: 14px; font-weight: 600; }
+    .vr-ok  { background: #e6f4ea; color: #1b5e32; border-left: 4px solid #2e8b4f; }
+    .vr-err { background: #fdecea; color: #8a1c14; border-left: 4px solid #c92a20; }
+    .vr-status { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .vr-pending  { background: #fff1cc; color: #7a4b00; }
+    .vr-approved { background: #e6f4ea; color: #1b5e32; }
+    .vr-declined { background: #fdecea; color: #8a1c14; }
+    .vr-actions { white-space: nowrap; text-align: right; }
+    .vr-btn { border: 0; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .vr-approve { background: #2e8b4f; color: #fff; }
+    .vr-decline { background: #fff; color: #b3261e; border: 1px solid #b3261e; }
+    .vr-action { background: #fff; color: #5218c2; border: 1px solid #6725e6; }
+    .vr-action:hover { background: #f3edff; }
+    .vr-apply { background: #6725e6; color: #fff; padding: 10px 18px; }
+    .vr-clear { align-self: center; margin-left: 6px; color: #5218c2; font-weight: 600; font-size: 13px; text-decoration: none; }
+    .request-toolbar { flex-wrap: wrap; }
+</style>
+
+<style>
+    .vr-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(20, 10, 40, .35); }
+    .vr-backdrop[hidden] { display: none; }
+    .vr-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 60; width: min(520px, 100%); background: #fff; border-top: 4px solid #6725e6; box-shadow: -16px 0 44px rgba(30, 20, 60, .22); display: flex; flex-direction: column; transform: translateX(100%); visibility: hidden; transition: transform .22s ease, visibility 0s linear .22s; }
+    .vr-drawer.open { transform: none; visibility: visible; transition-delay: 0s; }
+    .vr-drawer-head { display: flex; justify-content: space-between; gap: 12px; padding: 18px 20px 14px; border-bottom: 1px solid #ecebf0; }
+    .vr-drawer-head h2 { margin: 0 0 8px; font-size: 19px; }
+    .vr-close { width: 36px; height: 36px; background: none; border: 0; border-radius: 6px; color: #555; font-size: 28px; line-height: 1; cursor: pointer; }
+    .vr-close:hover { background: #f3edff; }
+    .vr-drawer-body { flex: 1; overflow-y: auto; padding: 20px; background: #fcfcfd; }
+    .vr-details { margin: 0; background: #fff; border: 1px solid #ecebf0; border-radius: 8px; }
+    .vr-details div { padding: 14px 16px; border-bottom: 1px solid #f0eff4; }
+    .vr-details div:last-child { border-bottom: 0; }
+    .vr-details dt { color: #788493; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+    .vr-details dd { margin: 5px 0 0; color: #263445; font-size: 14px; overflow-wrap: anywhere; }
+    .vr-drawer-actions { display: flex; gap: 10px; padding: 14px 20px 18px; border-top: 1px solid #ecebf0; }
+    .vr-drawer-actions form { flex: 1; }
+    .vr-drawer-actions .vr-btn { width: 100%; }
+    .vr-drawer-actions[ data-complete ] { display: none; }
+</style>
+
+<script>
+    (function () {
+        var drawer = document.getElementById('vr-drawer');
+        var backdrop = document.getElementById('vr-backdrop');
+        if (!drawer || !backdrop) return;
+        var fields = ['student', 'email', 'property', 'address', 'room', 'when'];
+        var actions = drawer.querySelector('.vr-drawer-actions');
+        function close() { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); backdrop.hidden = true; document.body.classList.remove('drawer-open'); }
+        document.querySelectorAll('[data-viewing-action]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                fields.forEach(function (name) { document.getElementById('vr-' + name).textContent = button.dataset[name] || '-'; });
+                var status = button.dataset.status || 'pending';
+                var statusEl = document.getElementById('vr-drawer-status');
+                statusEl.className = 'vr-status vr-' + status;
+                statusEl.textContent = button.dataset.statusLabel || status;
+                document.getElementById('vr-approve-id').value = button.dataset.id;
+                document.getElementById('vr-decline-id').value = button.dataset.id;
+                // Staff may change a previous decision as well as decide pending requests.
+                actions.hidden = false;
+                drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false'); backdrop.hidden = false; document.body.classList.add('drawer-open');
+            });
+        });
+        document.getElementById('vr-close').addEventListener('click', close);
+        backdrop.addEventListener('click', close);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    }());
+</script>
 
 <style>
     .viewing-requests-page {
@@ -359,10 +511,46 @@
                 text-align: right;
             }
 
-            .viewing-requests-page .requests-table tbody td {
-                padding: 0;
-                border: 0;
-            }
+        .viewing-requests-page .requests-table tbody td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #f0f2f5;
+            color: #263445;
+            font-size: 13px;
+            line-height: 1.45;
+            vertical-align: middle;
+        }
+
+        .viewing-requests-page .requests-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .viewing-requests-page .requests-table tbody td strong {
+            display: inline-block;
+            line-height: 1.35;
+        }
+
+        .viewing-requests-page .vr-room-cell {
+            min-width: 240px;
+            overflow-wrap: break-word;
+        }
+
+        .viewing-requests-page .vr-room-name {
+            font-weight: 500;
+        }
+
+        .viewing-requests-page .vr-property-name {
+            color: #66758a;
+        }
+
+        .viewing-requests-page .vr-when-cell {
+            min-width: 190px;
+            white-space: normal;
+        }
+
+        .viewing-requests-page .vr-email-cell {
+            min-width: 190px;
+            overflow-wrap: anywhere;
+        }
 
         .viewing-requests-page .empty-state {
             padding: 44px 20px 46px;
@@ -451,4 +639,3 @@
         }
     }
 </style>
-```

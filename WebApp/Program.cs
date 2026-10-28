@@ -37,8 +37,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();      // serves wwwroot (css, js, logo)
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Sign-in is handled by Supabase + StaffAuthFilter (session based), not by ASP.NET
+// authentication, so UseAuthentication/UseAuthorization are not needed here.
 app.UseSession();
 
 app.MapControllerRoute(

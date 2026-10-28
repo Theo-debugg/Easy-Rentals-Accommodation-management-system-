@@ -95,10 +95,26 @@
             <!-- Photos Placeholder -->
             <div class="form-panel">
                 <h5>Room Photos</h5>
-                <div class="text-center py-5" style="background: #f8fafc; border-radius: 7px; border: 1px dashed #cbd5e1;">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="margin-bottom: 10px;"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>
-                    <p class="text-muted mb-0" style="font-size: 13px;">No photos uploaded yet</p>
-                </div>
+                @if (Model.Photos.Any())
+                {
+                    <div class="row g-2">
+                        @foreach (var p in Model.Photos)
+                        {
+                            <div class="col-6">
+                                <a href="@p.PhotoUrl" target="_blank" rel="noopener">
+                                    <img src="@p.PhotoUrl" alt="Room photo" style="width:100%;height:140px;object-fit:contain;background:#f8fafc;border-radius:7px;" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5" style="background: #f8fafc; border-radius: 7px; border: 1px dashed #cbd5e1;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="margin-bottom: 10px;"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>
+                        <p class="text-muted mb-0" style="font-size: 13px;">No photos uploaded yet</p>
+                    </div>
+                }
             </div>
 
             <!-- System Info Panel -->

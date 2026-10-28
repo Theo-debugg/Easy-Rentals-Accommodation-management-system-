@@ -12,8 +12,9 @@ public class SupabaseFeedbackService : IFeedbackService
 {
     // ---- Your table and column names (change these to match Supabase) ----
     private const string FeedbackTable = "feedback";
-    // Columns read from the feedback table (ids for student and property, plus the review):
-    private const string FeedbackColumns = "id, student_id,property_id,rating,comments,created_at";
+    // Columns read from the feedback table (ids for student and property, plus the review).
+    // The Flutter app saves the written review in the "comments" column.
+    private const string FeedbackColumns = "id,student_id,property_id,rating,comments,created_at";
 
     private const string StudentTable = "student";      // table holding student names
     private const string StudentNameColumn = "full_name"; // column with the student's name
@@ -35,8 +36,8 @@ public class SupabaseFeedbackService : IFeedbackService
         // Look up the names for every student and comment that appears
         var students = await LookupNamesAsync(token, StudentTable, StudentNameColumn,
                                               rows.Select(r => r.StudentId));
-        var properties = await LookupNamesAsync(token, FeedbackTable, FeedbackColumns,
-                                                rows.Select(r => r.Comment));
+        var properties = await LookupNamesAsync(token, PropertyTable, PropertyNameColumn,
+                                                rows.Select(r => r.PropertyId));
 
         return rows.Select((r, i) => new FeedbackItem
         {
@@ -44,7 +45,7 @@ public class SupabaseFeedbackService : IFeedbackService
             StudentName = Name(students, r.StudentId, "Student"),
             PropertyName = Name(properties, r.PropertyId, ""),
             Rating = Math.Clamp(r.Rating, 1, 5),
-            Comment = r.Comment ?? "",
+            Comment = r.Comments ?? "",
             DateSubmitted = r.CreatedAt.ToLocalTime().DateTime
         }).ToList();
     }
@@ -94,6 +95,6 @@ internal sealed class FeedbackRow
     public string? StudentId { get; set; }
     public string? PropertyId { get; set; }
     public int Rating { get; set; }
-    public string? Comment { get; set; }
+    public string? Comments { get; set; }      // column "comments" (the Flutter app writes it)
     public DateTimeOffset CreatedAt { get; set; }
 }

@@ -5,7 +5,7 @@ namespace EasyRentalsStaff.Models;
 // ---- Rows read from Supabase ------------------------------------------------
 // (SupabaseService converts snake_case column names to these property names.)
 
-// Embedded student details: enquiries -> student (full_name, email).
+// Student details loaded from the student table using enquiries.student_id.
 public record StudentRef(string? FullName, string? Email);
 
 // A row of the "enquiries" table.
@@ -16,8 +16,7 @@ public record EnquiryRow(
     string? Message,          // the student's first message
     string? Status,
     DateTimeOffset CreatedAt,
-    [property: JsonPropertyName("student_id")] Guid? StudentId,
-    [property: JsonPropertyName("student")] StudentRef? Student);
+    [property: JsonPropertyName("student_id")] Guid? StudentId);
 
 // A row of the "enquiry_messages" table. A message with a staff_id was written by
 // staff; a message without one came from the student.
