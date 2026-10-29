@@ -2,15 +2,16 @@ using System.Text.Json.Serialization;
 
 namespace EasyRentalsStaff.Models;
 
-// A row of the "staff" table, as shown on the profile page.
+//A row of the "staff" table, as shown on the profile page.
 public record ProfileRow(Guid Id, string FullName, string? Email);
 
-// Tiny rows used only to count records.
+//Tiny rows used only to count records.
 public record IdRow(Guid Id);
 public record RefRow([property: JsonPropertyName("ReferenceNo")] Guid ReferenceNo);
 
 public class ProfileViewModel
 {
+    //Constructor
     public ProfileViewModel(ProfileRow staff, int? repliesSent, int? roomsUpdated, int? openEnquiries)
     {
         StaffId = staff.Id;
@@ -20,7 +21,7 @@ public class ProfileViewModel
         RoomsUpdated = roomsUpdated;
         OpenEnquiries = openEnquiries;
     }
-
+      //Properties
     public Guid StaffId { get; }
     public string FullName { get; }
     public string Email { get; }
@@ -28,7 +29,6 @@ public class ProfileViewModel
     public int? RoomsUpdated { get; }
     public int? OpenEnquiries { get; }
 
-    // "Test Staff" -> "TS"
     public string Initials
     {
         get
