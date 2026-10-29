@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EasyRentalsStaff.Controllers
 {
-    //[Authorize]
     public class RoomsController : Controller
     {
+        //Field variable
         private readonly SupabaseService _supabase;
-
+         //Constructor
         public RoomsController(SupabaseService supabase)
         {
             _supabase = supabase;
@@ -135,7 +135,7 @@ namespace EasyRentalsStaff.Controllers
                     description = model.Description,
                     availability = model.Availability,
                     amenities = GetSelectedAmenities(model),
-                    staff_id = HttpContext.Session.StaffId(),   // who made the last change
+                    staff_id = HttpContext.Session.StaffId(),  
                     updated_at = DateTime.UtcNow
                 };
 
@@ -168,7 +168,7 @@ namespace EasyRentalsStaff.Controllers
                 return NotFound();
             }
 
-            // Map database model to ViewModel
+            //Map database model to ViewModel
             var model = new RoomViewModel
             {
                 Id = room.Id,
@@ -188,7 +188,7 @@ namespace EasyRentalsStaff.Controllers
             return View(model);
         }
 
-        // POST: Rooms/Delete
+        //POST: Rooms/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
@@ -224,8 +224,8 @@ namespace EasyRentalsStaff.Controllers
                 return RedirectToAction(nameof(Details), new { id });
             }
         }
-        // ---- Room photos (Supabase Storage bucket "room-photos" + table "room_photo") ----
-
+        
+        //---- Room photos (Supabase Storage bucket "room-photos" + table "room_photo") ----
         private const long MaxPhotoBytes = 5 * 1024 * 1024;
         private static readonly Dictionary<string, string> PhotoTypes = new()
         {
@@ -244,17 +244,17 @@ namespace EasyRentalsStaff.Controllers
             }
             catch (SupabaseException)
             {
-                // Photos are optional: if the table is not set up yet the page still opens.
+                //Photos are optional: if the table is not set up yet the page still opens.
                 return new List<RoomPhotoRow>();
             }
         }
 
-        // GET: Rooms/Photos/{id}  -> JSON list of the room's photos
+        //GET: Rooms/Photos/{id}  -> JSON list of the room's photos
         [HttpGet]
         public async Task<IActionResult> Photos(Guid id) =>
             Json(new { photos = await LoadPhotosAsync(HttpContext.Session.Token(), id) });
 
-        // POST: Rooms/UploadPhoto/{id}  (called with fetch() from the Edit page; id = room id)
+        //POST: Rooms/UploadPhoto/{id}  (called with fetch() from the Edit page; id = room id)
         [HttpPost]
         public async Task<IActionResult> UploadPhoto(Guid id, IFormFile? photo)
         {
@@ -276,18 +276,17 @@ namespace EasyRentalsStaff.Controllers
                 using var ms = new MemoryStream();
                 await photo.CopyToAsync(ms);
 
-                // 1. the file goes into the bucket
+                //1. the file goes into the bucket
                 var url = await _supabase.UploadRoomPhotoAsync(token, path, ms.ToArray(), contentType);
                 uploaded = true;
 
-                // 2. the room_photo row links the room to the file's public address
+                //2. the room_photo row links the room to the file's public address
                 await _supabase.InsertAsync(token, "room_photo", new { room_id = id, photo_url = url });
             }
             catch (SupabaseException ex)
             {
                 if (uploaded)
                 {
-                    // don't leave an orphan file behind if the row could not be saved
                     try { await _supabase.DeleteRoomPhotoAsync(token, path); } catch (SupabaseException) { }
                 }
                 return StatusCode(502, new { error = ex.Message });
@@ -296,7 +295,7 @@ namespace EasyRentalsStaff.Controllers
             return Json(new { photos = await LoadPhotosAsync(token, id) });
         }
 
-        // POST: Rooms/DeletePhoto/{id}?photoId=...  (id = room id)
+        //POST: Rooms/DeletePhoto/{id}?photoId=...  (id = room id)
         [HttpPost]
         public async Task<IActionResult> DeletePhoto(Guid id, Guid photoId)
         {
