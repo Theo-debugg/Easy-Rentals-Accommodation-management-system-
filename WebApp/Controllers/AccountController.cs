@@ -8,6 +8,7 @@ namespace EasyRentalsStaff.Controllers;
 
 public class AccountController : Controller
 {
+    //Filed variable
     private readonly SupabaseService _supabase;
 
      //Constructor
