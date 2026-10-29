@@ -6,11 +6,13 @@ namespace EasyRentalsStaff.Controllers;
 
 public class ProfileController : Controller
 {
+    //Field variable
     private readonly SupabaseService _supabase;
 
+     //Contructor
     public ProfileController(SupabaseService supabase) => _supabase = supabase;
 
-    // GET /Profile  -> read-only details of the signed-in staff member
+    //GET /Profile  -> read-only details of the signed-in staff member
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -23,20 +25,20 @@ public class ProfileController : Controller
         if (staff is null)
             return RedirectToAction("Logout", "Account");
 
-        // The activity numbers are a bonus: if one fails, show "-" instead of breaking the page.
+        //The activity numbers are a bonus: if one fails, show "-" instead of breaking the page.
         var replies = await CountAsync<IdRow>(token, "enquiry_messages", $"staff_id=eq.{id}&select=id");
         var rooms = await CountAsync<IdRow>(token, "room", $"staff_id=eq.{id}&select=id");
-        // "open" = anything not resolved yet (the Flutter app saves new enquiries as "Pending")
+        //"open" = anything not resolved yet (the Flutter app saves new enquiries as "Pending")
         var open = await CountAsync<RefRow>(token, "enquiries", "status=neq.resolved&select=ReferenceNo");
 
         return View(new ProfileViewModel(staff, replies, rooms, open));
     }
 
-    // GET /Profile/ChangePassword  -> its own page
+    //GET /Profile/ChangePassword  -> its own page
     [HttpGet]
     public IActionResult ChangePassword() => View(new ChangePasswordViewModel());
 
-    // POST /Profile/ChangePassword
+    //POST /Profile/ChangePassword
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
     {
