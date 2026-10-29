@@ -4,6 +4,7 @@ namespace EasyRentalsStaff.Models
 {
     public class Room
     {
+        //Properties
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
@@ -28,7 +29,6 @@ namespace EasyRentalsStaff.Models
         [JsonPropertyName("amenities")]
         public string? Amenities { get; set; }
 
-        // Nullable: a room row without a timestamp must not break the whole page.
         [JsonPropertyName("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
@@ -36,6 +36,6 @@ namespace EasyRentalsStaff.Models
         public Guid? StaffId { get; set; }
     }
 
-    // A row of the "room_photo" table (one uploaded picture of a room).
+    //A row of the "room_photo" table (one uploaded picture of a room).
     public record RoomPhotoRow(Guid Id, string PhotoUrl);
 }
