@@ -7,22 +7,24 @@ namespace EasyRentalsStaff.Controllers;
 
 public class FeedbackController : Controller
 {
+    //Field variables
     private const int PageSize = 5;
 
     private readonly IFeedbackService _feedback;
     private readonly ILogger<FeedbackController> _logger;
 
+     //Constructor
     public FeedbackController(IFeedbackService feedback, ILogger<FeedbackController> logger)
     {
         _feedback = feedback;
         _logger = logger;
     }
 
-    // GET: /Feedback?searchTerm=wifi&sortOrder=newest&page=1
+    //GET: /Feedback?searchTerm=wifi&sortOrder=newest&page=1
     public async Task<IActionResult> Index(string? searchTerm, string sortOrder = "newest", int page = 1)
     {
-        // Not signed in? Send them to log in.
-        // Match this to what your other controllers (e.g. Dashboard) do.
+        //Not signed in? Send them to log in.
+        //Match this to what your other controllers (e.g. Dashboard) do.
         var token = HttpContext.Session.Token();
         if (string.IsNullOrEmpty(token))
             return RedirectToAction("Login", "Account");
@@ -33,19 +35,6 @@ public class FeedbackController : Controller
         {
             all = await _feedback.GetAllAsync(token);
         }
-        //catch (SupabaseException ex)
-        //{
-        //    _logger.LogError(ex, "Supabase refused the feedback request");
-        //    all = new List<FeedbackItem>();
-        //    loadError = "Feedback could not be loaded. If this keeps happening, sign out and sign in again.";
-        //}
-        //catch (Exception ex)
-        //{
-        //    _logger.LogError(ex, "Could not load feedback");
-        //    all = new List<FeedbackItem>();
-        //    loadError = "Feedback could not be loaded right now. Please try again.";
-        //}
-
         catch (SupabaseException ex)
         {
             _logger.LogError(ex, "Supabase refused the feedback request");
@@ -72,7 +61,7 @@ public class FeedbackController : Controller
         for (int star = 5; star >= 1; star--)
             vm.RatingBreakdown[star] = all.Count(f => f.Rating == star);
 
-        // Search
+        //Search
         IEnumerable<FeedbackItem> filtered = all;
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -83,7 +72,7 @@ public class FeedbackController : Controller
                 f.PropertyName.ToLower().Contains(term));
         }
 
-        // Sort
+        //Sort
         filtered = sortOrder switch
         {
             "oldest" => filtered.OrderBy(f => f.DateSubmitted),
@@ -92,7 +81,7 @@ public class FeedbackController : Controller
             _ => filtered.OrderByDescending(f => f.DateSubmitted)
         };
 
-        // Page
+        //Page
         var filteredList = filtered.ToList();
         vm.FilteredCount = filteredList.Count;
         vm.Page = Math.Clamp(page, 1, vm.TotalPages);
