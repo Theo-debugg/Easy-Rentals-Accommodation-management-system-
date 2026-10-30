@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:easy_rentals_mobile_app/Models/room.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
@@ -9,7 +8,16 @@ import 'package:easy_rentals_mobile_app/Views/dashboard/main_shell.dart';
 import 'package:easy_rentals_mobile_app/Views/enquiries/send_enquiry_screen.dart';
 import 'package:easy_rentals_mobile_app/Views/Widgets/room_photo_slider.dart';
 
+/// Read-only detail view for a single room.
+///
+/// Shows a photo carousel, title, price, availability, description, and
+/// amenity chips, plus two primary actions:
+/// - "Request Viewing" → [BookingAppointmentScreen]
+/// - "Send Enquiry" → [SendEnquiryScreen]
+///
+/// This screen is stateless: it renders whatever the supplied [Room] contains.
 class RoomDetailsScreen extends StatelessWidget {
+  /// The room being displayed.
   final Room room;
 
   const RoomDetailsScreen({
@@ -17,6 +25,13 @@ class RoomDetailsScreen extends StatelessWidget {
     required this.room,
   });
 
+  /// Builds a human-readable title from the room's type and number.
+  ///
+  /// Falls back gracefully when either field is missing:
+  /// - "Room details" if both are blank
+  /// - "Room <number>" if only the type is blank
+  /// - "<type>" if only the number is blank
+  /// - "<type> — Room <number>" otherwise
   String get _roomTitle {
     final type = room.roomType.trim();
     final number = room.roomNumber.trim();
@@ -28,6 +43,10 @@ class RoomDetailsScreen extends StatelessWidget {
     return '$type — Room $number';
   }
 
+  /// Formats [room.price] as e.g. "R1,234.50 per month".
+  ///
+  /// Inserts thousands separators via a regex, and omits the decimal part
+  /// when it is exactly "00" (so "R1,200 per month", not "R1,200.00 ...").
   String get _formattedPrice {
     final price = room.price;
     final value = price.toStringAsFixed(2);
@@ -35,6 +54,8 @@ class RoomDetailsScreen extends StatelessWidget {
     final wholeNumber = parts[0];
     final decimals = parts.length > 1 ? parts[1] : '00';
 
+    // \B(?=(\d{3})+(?!\d)) matches positions that precede groups of 3 digits
+    // but aren't the very start of the string.
     final formattedWholeNumber = wholeNumber.replaceAllMapped(
       RegExp(r'\B(?=(\d{3})+(?!\d))'),
       (_) => ',',
@@ -46,6 +67,9 @@ class RoomDetailsScreen extends StatelessWidget {
     return 'R$formattedWholeNumber$formattedDecimals per month';
   }
 
+  /// Builds the room's photo carousel at a fixed height.
+  ///
+  /// Relies on [RoomPhotoSlider] to handle empty / loading / error states.
   Widget _buildRoomImage() {
     return RoomPhotoSlider(
       photoUrls: room.photoUrls,
@@ -55,9 +79,12 @@ class RoomDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Pre-trim fields once so the widget tree stays free of repeated
+    // string manipulation.
     final description = room.description.trim();
     final amenities = room.amenities;
 
+    // Default to "Unknown" so the availability pill always has text.
     final availability = room.availability.trim().isEmpty
         ? 'Unknown'
         : room.availability.trim();
@@ -84,12 +111,14 @@ class RoomDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Photo carousel with rounded corners.
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: _buildRoomImage(),
             ),
             const SizedBox(height: 16),
 
+            // Title (type + room number).
             Text(
               _roomTitle,
               style: const TextStyle(
@@ -99,6 +128,7 @@ class RoomDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
+            // Formatted monthly price.
             Text(
               _formattedPrice,
               style: const TextStyle(
@@ -108,6 +138,8 @@ class RoomDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
+            // Availability pill: green background for available, orange
+            // otherwise. Uses a lower-alpha tint so the label stays legible.
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -132,6 +164,7 @@ class RoomDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
+            // Description section (with fallback text when empty).
             const Text(
               'Description',
               style: TextStyle(
@@ -151,6 +184,7 @@ class RoomDetailsScreen extends StatelessWidget {
               ),
             ),
 
+            // Amenities section — rendered only when the list is non-empty.
             if (amenities.isNotEmpty) ...[
               const SizedBox(height: 24),
               const Text(
@@ -161,6 +195,7 @@ class RoomDetailsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
+              // Wrap flows chips onto new lines as space runs out.
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -178,6 +213,9 @@ class RoomDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 28),
 
+            // Primary actions: request a viewing or send an enquiry. The two
+            // buttons share the row via Expanded so they always split space
+            // evenly, with a 12px gap between them.
             Row(
               children: [
                 Expanded(
@@ -188,6 +226,8 @@ class RoomDetailsScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => BookingAppointmentScreen(
+                            // Forward this room's title/property id so the
+                            // booking screen can load the right rooms.
                             propertyTitle: _roomTitle,
                             propertyAddress:
                                 'Property ID: ${room.propertyId}',
@@ -202,12 +242,15 @@ class RoomDetailsScreen extends StatelessWidget {
                 Expanded(
                   child: CustomButton(
                     text: 'Send Enquiry',
+                    // Outlined variant to visually distinguish it from the
+                    // primary "Request Viewing" action.
                     isOutlined: true,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => SendEnquiryScreen(
+                            // Pre-fill the enquiry subject with this room.
                             initialSubject:
                                 'Enquiry about $_roomTitle',
                           ),
@@ -221,6 +264,8 @@ class RoomDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
+
+      // "Properties" is index 1 in the shared bottom nav.
       bottomNavigationBar: CustomBottomNav(
         currentIndex: 1,
         onTap: (index) => MainShell.goToTab(context, index),

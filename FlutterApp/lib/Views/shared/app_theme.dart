@@ -1,7 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Centralised theme configuration for the Easy Rentals app.
+///
+/// Exposes the brand colour palette as static constants and builds the
+/// app-wide [ThemeData] via [lightTheme]. Widgets should read colours from
+/// here (e.g. `AppTheme.primaryPurple`) rather than hard-coding values.
 class AppTheme {
   // Easy Rentals brand colours
   static const Color primaryPurple = Color(0xFF6428D9);
@@ -21,7 +25,14 @@ class AppTheme {
   static const Color successColor = brandGreen;
   static const Color highlightColor = brandOrange;
 
+  /// Builds the app's light theme.
+  ///
+  /// Uses Material 3 with the Poppins font family across the text theme, and
+  /// configures consistent styling for buttons, inputs, app bars, cards,
+  /// chips, and the bottom navigation bar.
   static ThemeData get lightTheme {
+    // Start from Google Fonts' Poppins text theme, then override specific
+    // styles below.
     final baseTextTheme = GoogleFonts.poppinsTextTheme();
 
     return ThemeData(
@@ -29,6 +40,10 @@ class AppTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: background,
       primaryColor: primaryPurple,
+
+      // Seed the colour scheme from the brand purple, then pin the key roles
+      // (primary/secondary/tertiary/surface) so they stay stable regardless
+      // of any future Material 3 seed-colour algorithm changes.
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryPurple,
         brightness: Brightness.light,
@@ -40,6 +55,9 @@ class AppTheme {
         onSecondary: Colors.white,
         onSurface: textPrimary,
       ),
+
+      // Typography scale. Each style is defined explicitly so the visual
+      // hierarchy stays consistent across screens.
       textTheme: baseTextTheme.copyWith(
         headlineLarge: GoogleFonts.poppins(
           fontSize: 24,
@@ -77,6 +95,8 @@ class AppTheme {
       ),
 
       // Buttons
+
+      // Filled buttons: solid purple, pill-shaped, flat elevation.
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryPurple,
@@ -97,6 +117,8 @@ class AppTheme {
           ),
         ),
       ),
+
+      // Outlined buttons: purple outline matching the filled variant's shape.
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: primaryPurple,
@@ -114,6 +136,8 @@ class AppTheme {
           ),
         ),
       ),
+
+      // Text buttons: purple text, semibold.
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: primaryPurple,
@@ -124,6 +148,9 @@ class AppTheme {
       ),
 
       // Input fields
+
+      // Shared decoration for TextFields: filled white background, rounded
+      // borders that highlight purple on focus and red on error.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: white,
@@ -164,6 +191,9 @@ class AppTheme {
       ),
 
       // App bars
+
+      // Flat app bar that blends into the page background with a semibold
+      // Poppins title, left-aligned by default.
       appBarTheme: AppBarTheme(
         backgroundColor: background,
         foregroundColor: textPrimary,
@@ -177,6 +207,8 @@ class AppTheme {
       ),
 
       // Cards
+
+      // Border-only cards (no shadow) with 16px rounded corners.
       cardTheme: CardThemeData(
         color: cardColor,
         elevation: 0,
@@ -188,6 +220,8 @@ class AppTheme {
       ),
 
       // Selection controls
+
+      // Pill-shaped chips: white when unselected, purple when selected.
       chipTheme: ChipThemeData(
         backgroundColor: white,
         selectedColor: primaryPurple,
@@ -207,6 +241,9 @@ class AppTheme {
       ),
 
       // Bottom navigation defaults
+
+      // Material 3 NavigationBar: purple-tinted indicator for the selected
+      // item, with label colour/weight changing based on selection state.
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: white,
         indicatorColor: primaryPurple.withValues(alpha: 0.12),
@@ -222,6 +259,7 @@ class AppTheme {
         }),
       ),
 
+      // Dividers and progress indicators use the brand colours.
       dividerColor: borderColor,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: primaryPurple,

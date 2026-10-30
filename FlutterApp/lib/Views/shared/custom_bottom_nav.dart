@@ -1,9 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 
+/// A styled bottom navigation bar used across the app's main tabs.
+///
+/// Wraps a [BottomNavigationBar] in a container that adds a top border and a
+/// soft upward shadow, giving it a card-like appearance that separates it from
+/// the scaffold background.
 class CustomBottomNav extends StatelessWidget {
+  /// Index of the currently selected tab.
   final int currentIndex;
+
+  /// Callback invoked with the tapped tab's index when the user changes tabs.
   final Function(int) onTap;
 
   const CustomBottomNav({
@@ -14,6 +21,8 @@ class CustomBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Outer container provides the visual chrome (border, shadow, white bg)
+    // around the actual BottomNavigationBar.
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.white,
@@ -34,9 +43,11 @@ class CustomBottomNav extends StatelessWidget {
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
+        // Fixed layout keeps all labels visible regardless of item count.
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppTheme.primaryPurple,
         unselectedItemColor: AppTheme.textSecondary,
+        // Let the wrapping container supply background and elevation.
         backgroundColor: Colors.transparent,
         elevation: 0,
         selectedFontSize: 10,
@@ -79,6 +90,8 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 
+  /// Builds a single navigation item with paired outline (inactive) and
+  /// filled (active) icons.
   BottomNavigationBarItem _buildItem({
     required IconData icon,
     required IconData activeIcon,

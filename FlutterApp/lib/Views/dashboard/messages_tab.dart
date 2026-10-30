@@ -1,8 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/app_theme.dart';
 
+/// Displays the current student's enquiries and, once one is opened, the
+/// full message thread with staff replies.
+///
+/// Two modes:
+/// - **List mode** — a scrollable list of the student's enquiries.
+/// - **Conversation mode** — a threaded view of a single enquiry, including
+///   the original enquiry body, staff replies, and follow-up messages the
+///   student can send.
 class MessagesTab extends StatefulWidget {
   const MessagesTab({super.key});
 
@@ -11,21 +18,33 @@ class MessagesTab extends StatefulWidget {
 }
 
 class _MessagesTabState extends State<MessagesTab> {
+  // Shared Supabase client for all reads/writes in this tab.
   final SupabaseClient _supabase = Supabase.instance.client;
+
+  // Composer controller for follow-up messages.
   final TextEditingController _messageController =
       TextEditingController();
+
+  // Scrolls the conversation list to the bottom after load/send.
   final ScrollController _scrollController = ScrollController();
 
+  // Enquiries belonging to the current student (list mode).
   List<Map<String, dynamic>> _enquiries = [];
+
+  // Message thread for [_selectedEnquiry] (conversation mode), including the
+  // synthesised "original enquiry" entry prepended in [_loadMessages].
   List<Map<String, dynamic>> _messages = [];
 
+  // The enquiry currently open in conversation mode; `null` in list mode.
   Map<String, dynamic>? _selectedEnquiry;
 
+  // Loading / in-flight flags for the various async operations.
   bool _loadingEnquiries = true;
   bool _loadingMessages = false;
   bool _sending = false;
   bool _updatingStatus = false;
 
+  // Error text shown when the enquiry list fails to load.
   String? _error;
 
   @override
@@ -41,6 +60,9 @@ class _MessagesTabState extends State<MessagesTab> {
     super.dispose();
   }
 
+  /// Formats a Supabase timestamp as `dd/MM/yyyy HH:mm` in local time.
+  ///
+  /// Returns an empty string for `null` or unparseable values.
   String _formatDate(dynamic value) {
     if (value == null) return '';
 
@@ -56,6 +78,11 @@ class _MessagesTabState extends State<MessagesTab> {
         '${localDate.minute.toString().padLeft(2, '0')}';
   }
 
+  /// Loads the current student's enquiries from Supabase.
+  ///
+  /// - If signed out, shows an auth error.
+  /// - On success, refreshes [_enquiries] and re-resolves [_selectedEnquiry]
+  ///   by `ReferenceNo` so any open conversation keeps up-to-date status.
   Future<void> _loadEnquiries() async {
     final user = _supabase.auth.currentUser;
 
@@ -77,6 +104,7 @@ class _MessagesTabState extends State<MessagesTab> {
     }
 
     try {
+      // Fetch only this student's enquiries, newest first.
       final response = await _supabase
           .from('enquiries')
           .select()
@@ -93,6 +121,7 @@ class _MessagesTabState extends State<MessagesTab> {
         if (_selectedEnquiry != null) {
           final referenceNo = _selectedEnquiry!['ReferenceNo'];
 
+          // Find the same enquiry in the freshly-loaded list.
           final updatedEnquiries = _enquiries.where(
             (enquiry) => enquiry['ReferenceNo'] == referenceNo,
           );
@@ -114,6 +143,7 @@ class _MessagesTabState extends State<MessagesTab> {
     }
   }
 
+  /// Opens the given [enquiry] in conversation mode and loads its messages.
   Future<void> _openEnquiry(
     Map<String, dynamic> enquiry,
   ) async {
@@ -126,69 +156,81 @@ class _MessagesTabState extends State<MessagesTab> {
     await _loadMessages();
   }
 
-  
-Future<void> _loadMessages() async {
-  final enquiry = _selectedEnquiry;
+  /// Loads the message thread for the currently selected enquiry.
+  ///
+  /// The original enquiry body is prepended (flagged with
+  /// `is_original_enquiry: true`) so it renders as the first bubble in the
+  /// conversation. Subsequent rows come from `enquiry_messages`.
+  ///
+  /// After loading, scrolls to the bottom so the newest message is visible.
+  Future<void> _loadMessages() async {
+    final enquiry = _selectedEnquiry;
 
-  if (enquiry == null) return;
+    if (enquiry == null) return;
 
-  try {
-    final referenceNo = enquiry['ReferenceNo'];
+    try {
+      final referenceNo = enquiry['ReferenceNo'];
 
-    final response = await _supabase
-        .from('enquiry_messages')
-        .select()
-        .eq('enquiry_ReferenceNo', referenceNo)
-        .order('created_at', ascending: true);
+      // Fetch follow-up messages, oldest first.
+      final response = await _supabase
+          .from('enquiry_messages')
+          .select()
+          .eq('enquiry_ReferenceNo', referenceNo)
+          .order('created_at', ascending: true);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    // Start with the original enquiry message.
-    final allMessages = <Map<String, dynamic>>[];
+      // Start with the original enquiry message.
+      final allMessages = <Map<String, dynamic>>[];
 
-    final originalMessage =
-        (enquiry['message'] ?? '').toString().trim();
+      final originalMessage =
+          (enquiry['message'] ?? '').toString().trim();
 
-    if (originalMessage.isNotEmpty) {
-      allMessages.add({
-        'message': originalMessage,
-        'student_id': enquiry['student_id'],
-        'staff_id': null,
-        'created_at': enquiry['created_at'],
-        'is_original_enquiry': true,
-      });
-    }
-
-    // Add all subsequent student and staff messages.
-    allMessages.addAll(
-      List<Map<String, dynamic>>.from(response),
-    );
-
-    setState(() {
-      _messages = allMessages;
-      _loadingMessages = false;
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(
-          _scrollController.position.maxScrollExtent,
-        );
+      if (originalMessage.isNotEmpty) {
+        allMessages.add({
+          'message': originalMessage,
+          'student_id': enquiry['student_id'],
+          'staff_id': null,
+          'created_at': enquiry['created_at'],
+          'is_original_enquiry': true,
+        });
       }
-    });
-  } catch (e) {
-    if (!mounted) return;
 
-    setState(() {
-      _loadingMessages = false;
-    });
+      // Add all subsequent student and staff messages.
+      allMessages.addAll(
+        List<Map<String, dynamic>>.from(response),
+      );
 
-    _showMessage('Could not load this conversation.');
-    debugPrint('Load messages error: $e');
+      setState(() {
+        _messages = allMessages;
+        _loadingMessages = false;
+      });
+
+      // Scroll to the bottom once the list has been laid out.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
+        }
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _loadingMessages = false;
+      });
+
+      _showMessage('Could not load this conversation.');
+      debugPrint('Load messages error: $e');
+    }
   }
-}
 
-
+  /// Sends the composer's text as a follow-up message on the open enquiry.
+  ///
+  /// Requires a signed-in user, an open enquiry, a non-empty message, and a
+  /// non-resolved enquiry (resolved threads are read-only). On success, clears
+  /// the composer and reloads the thread.
   Future<void> _sendMessage() async {
     final user = _supabase.auth.currentUser;
     final enquiry = _selectedEnquiry;
@@ -204,6 +246,7 @@ Future<void> _loadMessages() async {
       return;
     }
 
+    // Resolved enquiries are closed for new messages.
     if ((enquiry['status'] ?? '').toString().toLowerCase() ==
         'resolved') {
       _showMessage(
@@ -217,6 +260,8 @@ Future<void> _loadMessages() async {
     });
 
     try {
+      // Insert the message with `student_id` set and `staff_id` null so the
+      // bubble renders on the student's side of the thread.
       await _supabase.from('enquiry_messages').insert({
         'enquiry_ReferenceNo': enquiry['ReferenceNo'],
         'message': message,
@@ -226,6 +271,7 @@ Future<void> _loadMessages() async {
 
       _messageController.clear();
 
+      // Reload so the new message is included and the view scrolls down.
       await _loadMessages();
 
       if (!mounted) return;
@@ -245,6 +291,11 @@ Future<void> _loadMessages() async {
     }
   }
 
+  /// Marks the currently open enquiry as resolved.
+  ///
+  /// Updates the row in Supabase, then mirrors the change locally in both
+  /// [_selectedEnquiry] and the corresponding entry in [_enquiries] so the
+  /// UI updates without a full reload.
   Future<void> _markResolved() async {
     final user = _supabase.auth.currentUser;
     final enquiry = _selectedEnquiry;
@@ -264,6 +315,7 @@ Future<void> _loadMessages() async {
     });
 
     try {
+      // Scoped by `student_id` so a user can only resolve their own enquiry.
       await _supabase
           .from('enquiries')
           .update({'status': 'Resolved'})
@@ -273,11 +325,13 @@ Future<void> _loadMessages() async {
       if (!mounted) return;
 
       setState(() {
+        // Update the selected enquiry's status in place.
         _selectedEnquiry = {
           ..._selectedEnquiry!,
           'status': 'Resolved',
         };
 
+        // Update the matching row in the enquiry list.
         _enquiries = _enquiries.map((item) {
           if (item['ReferenceNo'] == enquiry['ReferenceNo']) {
             return {...item, 'status': 'Resolved'};
@@ -302,6 +356,7 @@ Future<void> _loadMessages() async {
     }
   }
 
+  /// Shows a snackbar with [message] (no-op if the widget is unmounted).
   void _showMessage(String message) {
     if (!mounted) return;
 
@@ -310,6 +365,7 @@ Future<void> _loadMessages() async {
     );
   }
 
+  /// Maps a status string to a display colour.
   Color _statusColor(String status) {
     switch (status.toLowerCase()) {
       case 'answered':
@@ -323,6 +379,7 @@ Future<void> _loadMessages() async {
     }
   }
 
+  /// Builds the small coloured status pill used in lists and the header.
   Widget _buildStatus(String status) {
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -334,6 +391,7 @@ Future<void> _loadMessages() async {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
+        // Fall back to "Pending" for empty strings.
         status.isEmpty ? 'Pending' : status,
         style: const TextStyle(
           fontSize: 11,
@@ -344,11 +402,14 @@ Future<void> _loadMessages() async {
     );
   }
 
+  /// Builds the enquiry list (list mode), handling loading / error / empty
+  /// states and wrapping the populated list in a pull-to-refresh.
   Widget _buildEnquiryList() {
     if (_loadingEnquiries) {
       return const Center(child: CircularProgressIndicator());
     }
 
+    // Error state (only shown when there's nothing cached to display).
     if (_error != null && _enquiries.isEmpty) {
       return Center(
         child: Column(
@@ -365,6 +426,7 @@ Future<void> _loadMessages() async {
       );
     }
 
+    // Empty state.
     if (_enquiries.isEmpty) {
       return const Center(
         child: Padding(
@@ -392,9 +454,11 @@ Future<void> _loadMessages() async {
       );
     }
 
+    // Populated list with pull-to-refresh.
     return RefreshIndicator(
       onRefresh: _loadEnquiries,
       child: ListView.separated(
+        // Always scrollable so pull-to-refresh works even when short.
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _enquiries.length,
         separatorBuilder: (_, __) => const SizedBox(height: 10),
@@ -431,11 +495,13 @@ Future<void> _loadMessages() async {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildStatus(status),
+                    // Date only rendered when parseable.
                     if (date.isNotEmpty) ...[
                       const SizedBox(height: 6),
                       Text(date),
                     ],
                     const SizedBox(height: 6),
+                    // Preview of the enquiry body.
                     Text(
                       (enquiry['message'] ?? '').toString(),
                       maxLines: 2,
@@ -445,6 +511,7 @@ Future<void> _loadMessages() async {
                 ),
               ),
               trailing: const Icon(Icons.chevron_right),
+              // Open this enquiry's thread.
               onTap: () => _openEnquiry(enquiry),
             ),
           );
@@ -453,96 +520,108 @@ Future<void> _loadMessages() async {
     );
   }
 
-  
-  
-Widget _buildMessageBubble(
-  Map<String, dynamic> message,
-  String currentUserId,
-) {
-  final senderId = message['student_id']?.toString();
-  final staffId = message['staff_id']?.toString();
+  /// Builds a single chat bubble for one message.
+  ///
+  /// Bubbles are right-aligned (purple) for the current student's messages
+  /// (including the synthesised original enquiry) and left-aligned (green) for
+  /// staff replies. A sender label is shown inside each bubble.
+  Widget _buildMessageBubble(
+    Map<String, dynamic> message,
+    String currentUserId,
+  ) {
+    final senderId = message['student_id']?.toString();
+    final staffId = message['staff_id']?.toString();
 
-  final isOriginal = message['is_original_enquiry'] == true;
+    // The synthesised first message is the original enquiry body.
+    final isOriginal = message['is_original_enquiry'] == true;
 
-  final isStaff = !isOriginal &&
-      staffId != null &&
-      staffId.trim().isNotEmpty;
+    // Any non-original message with a non-blank staff_id is a staff reply.
+    final isStaff = !isOriginal &&
+        staffId != null &&
+        staffId.trim().isNotEmpty;
 
-  final isStudent = isOriginal ||
-      (!isStaff && senderId == currentUserId);
+    final isStudent = isOriginal ||
+        (!isStaff && senderId == currentUserId);
 
-  final text = (message['message'] ?? '').toString();
-  final date = _formatDate(message['created_at']);
+    final text = (message['message'] ?? '').toString();
+    final date = _formatDate(message['created_at']);
 
-  // Easy Rentals brand colours
-  const purple = Color(0xFF6428D9);
-  const lightGreen = Color(0xFFF1F7EC);
+    // Easy Rentals brand colours
+    const purple = Color(0xFF6428D9);
+    const lightGreen = Color(0xFFF1F7EC);
 
-  final alignment = isStudent
-      ? Alignment.centerRight
-      : Alignment.centerLeft;
+    final alignment = isStudent
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
 
-  final bubbleColor = isStudent ? purple : lightGreen;
-  final messageTextColor =
-      isStudent ? Colors.white : const Color(0xFF26351E);
-  final timestampColor =
-      isStudent ? const Color(0xFFE8DEFF) : const Color(0xFF64745A);
+    // Purple for the student's own messages, light green for staff replies.
+    final bubbleColor = isStudent ? purple : lightGreen;
+    final messageTextColor =
+        isStudent ? Colors.white : const Color(0xFF26351E);
+    final timestampColor =
+        isStudent ? const Color(0xFFE8DEFF) : const Color(0xFF64745A);
 
-  final senderLabel = isOriginal
-      ? 'Original enquiry'
-      : isStaff
-          ? 'Easy Rentals Staff'
-          : isStudent
-              ? 'You'
-              : 'Sender unknown';
+    final senderLabel = isOriginal
+        ? 'Original enquiry'
+        : isStaff
+            ? 'Easy Rentals Staff'
+            : isStudent
+                ? 'You'
+                : 'Sender unknown';
 
-  return Align(
-    alignment: alignment,
-    child: Container(
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width * 0.78,
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: bubbleColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            senderLabel,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: messageTextColor,
-            ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            text,
-            style: TextStyle(
-              color: messageTextColor,
-            ),
-          ),
-          if (date.isNotEmpty) ...[
-            const SizedBox(height: 6),
+    return Align(
+      alignment: alignment,
+      child: Container(
+        // Cap bubbles at 78% of the screen width for readability.
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.78,
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bubbleColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Sender label ("Original enquiry", "Easy Rentals Staff", ...).
             Text(
-              date,
+              senderLabel,
               style: TextStyle(
-                fontSize: 10,
-                color: timestampColor,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: messageTextColor,
               ),
             ),
+            const SizedBox(height: 5),
+            // Message body.
+            Text(
+              text,
+              style: TextStyle(
+                color: messageTextColor,
+              ),
+            ),
+            // Timestamp (only when parseable).
+            if (date.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                date,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: timestampColor,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-
+  /// Builds the conversation view (conversation mode): a header with a back
+  /// button, subject, and status pill; a scrollable thread; a composer; and
+  /// (unless resolved) a "Mark as Resolved" button.
   Widget _buildConversation() {
     final enquiry = _selectedEnquiry!;
     final user = _supabase.auth.currentUser;
@@ -557,10 +636,12 @@ Widget _buildMessageBubble(
 
     return Column(
       children: [
+        // Header row: back arrow + subject + status pill.
         Row(
           children: [
             IconButton(
               onPressed: () {
+                // Return to list mode.
                 setState(() {
                   _selectedEnquiry = null;
                   _messages = [];
@@ -585,6 +666,7 @@ Widget _buildMessageBubble(
         ),
         const Divider(),
 
+        // Message thread (or loading / empty states).
         Expanded(
           child: _loadingMessages
               ? const Center(child: CircularProgressIndicator())
@@ -608,6 +690,7 @@ Widget _buildMessageBubble(
                     ),
         ),
 
+        // Composer — replaced by a status note when the enquiry is resolved.
         if (isResolved)
           const Padding(
             padding: EdgeInsets.all(12),
@@ -622,6 +705,7 @@ Widget _buildMessageBubble(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                // Auto-growing text field (1–4 lines).
                 Expanded(
                   child: TextField(
                     controller: _messageController,
@@ -643,6 +727,7 @@ Widget _buildMessageBubble(
                   ),
                 ),
                 const SizedBox(width: 8),
+                // Send button; shows a spinner while a send is in-flight.
                 IconButton.filled(
                   onPressed: _sending ? null : _sendMessage,
                   icon: _sending
@@ -659,6 +744,7 @@ Widget _buildMessageBubble(
             ),
           ),
 
+        // Resolve action — only shown while the enquiry is still open.
         if (!isResolved)
           Padding(
             padding: const EdgeInsets.only(
@@ -694,6 +780,7 @@ Widget _buildMessageBubble(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Page heading — only shown in list mode.
             if (_selectedEnquiry == null) ...[
               const Text(
                 'My Messages',
@@ -708,6 +795,7 @@ Widget _buildMessageBubble(
               ),
               const SizedBox(height: 16),
             ],
+            // Body switches between list and conversation based on selection.
             Expanded(
               child: _selectedEnquiry == null
                   ? _buildEnquiryList()

@@ -3,6 +3,10 @@ import 'package:easy_rentals_mobile_app/ViewModels/profile_view_model.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/custom_button.dart';
 import 'package:easy_rentals_mobile_app/Views/shared/custom_textfield.dart';
 
+/// The "Profile" tab of [MainShell].
+///
+/// Lets the signed-in student view/edit their display name and email, change
+/// their password, and save the updates via [ProfileViewModel].
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
 
@@ -11,14 +15,20 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  // Controllers for the profile form.
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+
+  // True while a save or password change is in-flight.
   bool _isLoading = false;
+
+  // Owns the actual Supabase profile/password updates.
   final ProfileViewModel _profile = ProfileViewModel();
 
   @override
   void initState() {
     super.initState();
+    // Seed the form fields from the current auth user, when available.
     final user = _profile.currentUser;
     if (user != null) {
       _emailController.text = user.email ?? '';
@@ -33,6 +43,9 @@ class _ProfileTabState extends State<ProfileTab> {
     super.dispose();
   }
 
+  /// Saves the current name/email via [ProfileViewModel].
+  ///
+  /// Displays a result dialog on success or failure.
   Future<void> _updateProfile() async {
     setState(() => _isLoading = true);
     try {
@@ -47,6 +60,12 @@ class _ProfileTabState extends State<ProfileTab> {
     }
   }
 
+  /// Opens a dialog asking for a new password, then applies it.
+  ///
+  /// Validation and the actual update happen inside the dialog's "Save"
+  /// action; a result dialog is shown when finished. The temporary
+  /// [newPasswordController] is created here and not explicitly disposed
+  /// (the widget is short-lived and the dialog closes it promptly).
   Future<void> _changePassword() async {
     final newPasswordController = TextEditingController();
     
@@ -67,6 +86,7 @@ class _ProfileTabState extends State<ProfileTab> {
           TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
+              // Client-side minimum-length check (also enforced in the VM).
               if (newPasswordController.text.trim().length < 6) {
                 _showDialog('Error', 'Password must be at least 6 characters.');
                 return;
@@ -88,6 +108,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
+  /// Shows a simple OK-only result dialog.
   void _showDialog(String title, String message) {
     showDialog(
       context: context,
@@ -109,8 +130,10 @@ class _ProfileTabState extends State<ProfileTab> {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        // Stretch children so inputs and buttons fill the width.
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Avatar placeholder.
           Center(
             child: CircleAvatar(
               radius: 50,
@@ -119,18 +142,24 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           ),
           const SizedBox(height: 24),
+
+          // Editable name field.
           CustomTextField(
             label: 'Name',
             hint: 'Enter your name',
             controller: _nameController,
           ),
           const SizedBox(height: 16),
+
+          // Editable email field.
           CustomTextField(
             label: 'Email',
             hint: 'Enter your email',
             controller: _emailController,
           ),
           const SizedBox(height: 16),
+
+          // Secondary action: open the change-password dialog.
           SizedBox(
             height: 50,
             child: OutlinedButton(
@@ -155,6 +184,8 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           ),
           const SizedBox(height: 24),
+
+          // Primary action: save profile changes.
           CustomButton(
             text: _isLoading ? 'Saving...' : 'Save Changes',
             onPressed: _isLoading ? null : _updateProfile,
