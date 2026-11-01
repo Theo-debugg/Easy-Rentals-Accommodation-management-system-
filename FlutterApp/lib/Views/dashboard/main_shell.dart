@@ -9,13 +9,26 @@ import 'package:easy_rentals_mobile_app/Views/dashboard/messages_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/dashboard/profile_tab.dart';
 import 'package:easy_rentals_mobile_app/Views/authentication/login_screen.dart';
 
+/// The main post-login container: a shared app bar, a bottom nav bar, and an
+/// [IndexedStack] of the five dashboard tabs.
+///
+/// Keeps the tab state alive across switches (via IndexedStack) and exposes a
+/// static [goToTab] helper so any descendant screen can jump to a tab and pop
+/// back to the shell in one call.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
+  /// Global key to the state, enabling the static [goToTab] helper to reach
+  /// this shell's [MainShellState] from anywhere in the widget tree.
   static final GlobalKey<MainShellState> shellKey =
       GlobalKey<MainShellState>();
 
+  /// Pops everything above the shell, then switches to the tab at [index].
+  ///
+  /// Used by screens like [BookingAppointmentScreen] and [SendEnquiryScreen]
+  /// whose bottom nav can navigate into the shell.
   static void goToTab(BuildContext context, int index) {
+    // First pop back to the shell so its state is guaranteed to be alive.
     Navigator.of(context).popUntil((route) => route.isFirst);
     shellKey.currentState?.setIndex(index);
   }
@@ -25,9 +38,16 @@ class MainShell extends StatefulWidget {
 }
 
 class MainShellState extends State<MainShell> {
+  // Index of the currently visible tab.
   int _currentIndex = 0;
+
+  // Used by the logout button in the app bar.
   final AuthViewModel _auth = AuthViewModel();
 
+  /// The five tabs, in bottom-nav order.
+  ///
+  /// Rebuilt on each access so tab-level state (search text, controllers, etc.)
+  /// persists across rebuilds thanks to the IndexedStack + Element reuse.
   List<Widget> get _tabs => [
         HomeTab(onNavigateToTab: setIndex),
         const PropertiesTab(),
@@ -36,7 +56,9 @@ class MainShellState extends State<MainShell> {
         const ProfileTab(),
       ];
 
+  /// Switches to [index] if it's in range and different from the current tab.
   void setIndex(int index) {
+    // Guard against out-of-range indices from rogue callers.
     if (index < 0 || index > 4) return;
 
     if (mounted && index != _currentIndex) {
@@ -44,6 +66,8 @@ class MainShellState extends State<MainShell> {
     }
   }
 
+  /// Signs the user out, then replaces the entire navigation stack with the
+  /// login screen so they can't navigate back into authenticated content.
   Future<void> _handleLogout() async {
     await _auth.signOut();
 
@@ -62,6 +86,7 @@ class MainShellState extends State<MainShell> {
 
       appBar: AppBar(
         backgroundColor: AppTheme.white,
+        // Matches the background colour so M3's tint doesn't shade the bar.
         surfaceTintColor: AppTheme.white,
         foregroundColor: AppTheme.textPrimary,
         elevation: 1,
@@ -70,6 +95,7 @@ class MainShellState extends State<MainShell> {
         titleSpacing: 16,
         title: Row(
           children: [
+            // Logo tile with a soft purple backdrop.
             Container(
               width: 42,
               height: 42,
@@ -81,6 +107,7 @@ class MainShellState extends State<MainShell> {
               child: Image.asset(
                 'assets/easy-rentals-group-logo.webp',
                 fit: BoxFit.contain,
+                // Fallback icon if the asset can't be loaded.
                 errorBuilder: (context, error, stackTrace) {
                   return const Icon(
                     Icons.home_work_outlined,
@@ -92,6 +119,7 @@ class MainShellState extends State<MainShell> {
             ),
             const SizedBox(width: 10),
 
+            // App title + subtitle stack.
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,6 +149,7 @@ class MainShellState extends State<MainShell> {
               ),
             ),
 
+            // Logout action.
             IconButton(
               tooltip: 'Logout',
               onPressed: _handleLogout,
@@ -145,6 +174,7 @@ class MainShellState extends State<MainShell> {
               ),
             ),*/
 
+            // Profile shortcut: jumps straight to the Profile tab (index 4).
             IconButton(
               tooltip: 'Profile',
               onPressed: () => setIndex(4),
@@ -157,11 +187,13 @@ class MainShellState extends State<MainShell> {
         ),
       ),
 
+      // IndexedStack keeps all tabs mounted so their state survives switching.
       body: IndexedStack(
         index: _currentIndex,
         children: _tabs,
       ),
 
+      // Shared bottom navigation; tapping a tab calls setIndex.
       bottomNavigationBar: CustomBottomNav(
         currentIndex: _currentIndex,
         onTap: setIndex,

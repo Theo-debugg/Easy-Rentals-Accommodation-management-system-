@@ -5,6 +5,7 @@ namespace EasyRentalsStaff.ViewModel
 {
     public class RoomViewModel
     {
+        //Properties some with default values
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Property ID is required")]
@@ -39,7 +40,7 @@ namespace EasyRentalsStaff.ViewModel
 
         public List<string> ExistingAmenities { get; set; } = new List<string>();
 
-        // Photos already uploaded for this room (read from the room_photo table)
+        //Photos already uploaded for this room (read from the room_photo table)
         public List<RoomPhotoRow> Photos { get; set; } = new();
     }
 }

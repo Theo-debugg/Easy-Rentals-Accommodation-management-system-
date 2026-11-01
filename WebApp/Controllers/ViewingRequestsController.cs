@@ -8,11 +8,13 @@ namespace EasyRentalsStaff.Controllers;
 
 public class ViewingRequestsController : Controller
 {
+    //Field variables
     private readonly SupabaseService _supabase;
-
+    
+     //Constructor
     public ViewingRequestsController(SupabaseService supabase) => _supabase = supabase;
 
-    // GET /ViewingRequests?q=&status=&room=&date=
+    //GET /ViewingRequests?q=&status=&room=&date=
     [HttpGet]
     public async Task<IActionResult> Index(string? q, string? status, string? room, string? date)
     {
@@ -28,7 +30,7 @@ public class ViewingRequestsController : Controller
             return View(new ViewingRequestsViewModel { LoadError = ex.Message });
         }
 
-        // Student names/emails: looked up separately so no table relationship is needed.
+        //Student names/emails: looked up separately so no table relationship is needed.
         var people = await LookupStudentsAsync(token,
             rows.Select(r => r.StudentId ?? r.UserId).Where(i => i.HasValue).Select(i => i!.Value));
 
@@ -54,7 +56,8 @@ public class ViewingRequestsController : Controller
                 };
             })
             .ToList();
-
+            
+         //Conditions
         IEnumerable<ViewingRequestItem> filtered = all;
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -84,8 +87,8 @@ public class ViewingRequestsController : Controller
         });
     }
 
-    // POST /ViewingRequests/Decide   (id = the request, decision = approved | declined)
-    // Any signed-in staff member can decide for now.
+    //POST /ViewingRequests/Decide   (id = the request, decision = approved | declined)
+    //Any signed-in staff member can decide for now.
     [HttpPost]
     public async Task<IActionResult> Decide(string id, string decision)
     {
@@ -133,7 +136,7 @@ public class ViewingRequestsController : Controller
         }
         catch (SupabaseException)
         {
-            // names fall back to "Student"; the page still works
+            //names fall back to "Student"; the page still works
         }
         return result;
     }

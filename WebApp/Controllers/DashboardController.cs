@@ -4,7 +4,7 @@ namespace EasyRentalsStaff.Controllers;
 
 public class DashboardController : Controller
 {
-    // GET /Dashboard  (the StaffAuthFilter already guarantees a signed-in staff member)
+    //GET /Dashboard (the StaffAuthFilter already guarantees a signed-in staff member)
     [HttpGet]
     public IActionResult Index() => View();
 }

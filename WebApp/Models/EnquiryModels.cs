@@ -2,14 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace EasyRentalsStaff.Models;
 
-// ---- Rows read from Supabase ------------------------------------------------
-// (SupabaseService converts snake_case column names to these property names.)
+//---- Rows read from Supabase ------------------------------------------------
+//(SupabaseService converts snake_case column names to these property names.)
 
-// Student details loaded from the student table using enquiries.student_id.
+//Student details loaded from the student table using enquiries.student_id.
 public record StudentRef(string? FullName, string? Email);
 
-// A row of the "enquiries" table.
-// Note: the key column is spelled "ReferenceNo" in your database (capital letters).
+//A row of the "enquiries" table.
+//Note: the key column is spelled "ReferenceNo" in your database (capital letters).
 public record EnquiryRow(
     [property: JsonPropertyName("ReferenceNo")] Guid ReferenceNo,
     string? Subject,
@@ -18,12 +18,11 @@ public record EnquiryRow(
     DateTimeOffset CreatedAt,
     [property: JsonPropertyName("student_id")] Guid? StudentId);
 
-// A row of the "enquiry_messages" table. A message with a staff_id was written by
-// staff; a message without one came from the student.
+//A row of the "enquiry_messages" table. A message with a staff_id was written by
+//staff; a message without one came from the student.
 public record MessageRow(string? Message, Guid? StaffId, DateTimeOffset CreatedAt);
 
-// ---- What the pages and the side panel use ---------------------------------
-
+//---- What the pages and the side panel use ---------------------------------
 public class EnquiryListItem
 {
     public Guid ReferenceNo { get; init; }
@@ -37,6 +36,7 @@ public class EnquiryListItem
 
 public class EnquiriesViewModel
 {
+    //Properties
     public List<EnquiryListItem> Items { get; init; } = new();
     public string? LoadError { get; init; }
     public int All => Items.Count;
@@ -47,6 +47,7 @@ public class EnquiriesViewModel
 
 public class ThreadMessageDto
 {
+    //Properties
     public bool FromStaff { get; init; }
     public string Sender { get; init; } = "";
     public string Stamp { get; init; } = "";
@@ -55,6 +56,7 @@ public class ThreadMessageDto
 
 public class ThreadDto
 {
+    //Properties
     public Guid ReferenceNo { get; init; }
     public string ShortRef { get; init; } = "";
     public string Subject { get; init; } = "";
@@ -70,8 +72,7 @@ public class ReplyRequest
     public string? Text { get; set; }
 }
 
-// ---- Small formatting helpers ----------------------------------------------
-
+//---- Small formatting helpers ----------------------------------------------
 public static class EnquiryFormat
 {
     private static readonly TimeZoneInfo Zone = FindZone();
@@ -89,7 +90,7 @@ public static class EnquiryFormat
 
     private static DateTime Local(DateTimeOffset t) => TimeZoneInfo.ConvertTime(t, Zone).DateTime;
 
-    // First 8 characters of the reference number, upper case: 3F9A21C4
+    //First 8 characters of the reference number, upper case: 3F9A21C4
     public static string ShortRef(Guid id) => id.ToString("N")[..8].ToUpperInvariant();
 
     public static string StatusKey(string? status) => (status ?? "new").Trim().ToLowerInvariant() switch
@@ -106,7 +107,6 @@ public static class EnquiryFormat
         _ => "New"
     };
 
-    // "Today 09:12", "Yesterday 16:40", "20 Oct 08:30"
     public static string ListStamp(DateTimeOffset t)
     {
         var local = Local(t);
@@ -115,7 +115,6 @@ public static class EnquiryFormat
         if (local.Date == today.AddDays(-1)) return $"Yesterday {local:HH:mm}";
         return local.ToString("d MMM HH:mm");
     }
-
-    // "22 Oct 09:12"
+    
     public static string MessageStamp(DateTimeOffset t) => Local(t).ToString("d MMM HH:mm");
 }

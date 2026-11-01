@@ -7,18 +7,18 @@ namespace EasyRentalsStaff.Controllers;
 
 public class EnquiriesController : Controller
 {
-    // If your Supabase table or column names differ, these three lines are the only
-    // place in the controller that needs to change (plus the records in EnquiryModels.cs).
+    /Field Variables
     private const string EnquirySelect = "ReferenceNo,subject,message,status,created_at,student_id";
     private const string MessageSelect = "message,staff_id,created_at";
     private const string MessageColumn = "message";
     private const string MessageLinkColumn = "enquiry_ReferenceNo";
 
     private readonly SupabaseService _supabase;
-
+    
+     //Constructor
     public EnquiriesController(SupabaseService supabase) => _supabase = supabase;
 
-    // GET /Enquiries  -> the list page (columns + filters + search)
+    //GET /Enquiries -> the list page (columns + filters + search)
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -36,11 +36,11 @@ public class EnquiriesController : Controller
         }
     }
 
-    // GET /Enquiries/Thread/{reference}  -> JSON for the side panel
+    //GET /Enquiries/Thread/{reference}  -> JSON for the side panel
     [HttpGet]
     public Task<IActionResult> Thread(Guid id) => ThreadResult(id);
 
-    // POST /Enquiries/Reply/{reference}  -> save a staff reply, return the updated thread
+    //POST /Enquiries/Reply/{reference}  -> save a staff reply, return the updated thread
     [HttpPost]
     public async Task<IActionResult> Reply(Guid id, [FromBody] ReplyRequest request)
     {
@@ -64,7 +64,7 @@ public class EnquiriesController : Controller
                 [MessageColumn] = text
             });
 
-            // First staff reply moves a brand-new enquiry to "in progress".
+            //First staff reply moves a brand-new enquiry to "in progress".
             if (EnquiryFormat.StatusKey(enquiry.Status) == "new")
                 await _supabase.UpdateAsync(token, "enquiries", $"ReferenceNo=eq.{id}", new { status = "in_progress" });
         }
@@ -76,7 +76,7 @@ public class EnquiriesController : Controller
         return await ThreadResult(id);
     }
 
-    // POST /Enquiries/Resolve/{reference}
+    //POST /Enquiries/Resolve/{reference}
     [HttpPost]
     public async Task<IActionResult> Resolve(Guid id)
     {
@@ -93,8 +93,7 @@ public class EnquiriesController : Controller
         return await ThreadResult(id);
     }
 
-    // ---- helpers -----------------------------------------------------------
-
+    //---- helpers -----------------------------------------------------------
     private async Task<EnquiryRow?> FindAsync(string token, Guid id) =>
         (await _supabase.SelectAsync<EnquiryRow>(token, "enquiries",
             $"ReferenceNo=eq.{id}&select={EnquirySelect}")).FirstOrDefault();
@@ -111,7 +110,7 @@ public class EnquiriesController : Controller
             var messages = await _supabase.SelectAsync<MessageRow>(token, "enquiry_messages",
                 $"{MessageLinkColumn}=eq.{id}&select={MessageSelect}&order=created_at.asc");
 
-            // The student's first message lives on the enquiry itself; replies follow it.
+            //The student's first message lives on the enquiry itself; replies follow it.
             var thread = new List<ThreadMessageDto>();
             if (!string.IsNullOrWhiteSpace(enquiry.Message))
                 thread.Add(new ThreadMessageDto
@@ -194,7 +193,7 @@ public class EnquiriesController : Controller
         }
         catch (SupabaseException)
         {
-            // Keep the page usable and use the standard fallback when lookup access is unavailable.
+            //Keep the page usable and use the standard fallback when lookup access is unavailable.
         }
 
         return result;
