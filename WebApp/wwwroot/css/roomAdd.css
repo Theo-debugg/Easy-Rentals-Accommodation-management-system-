@@ -1,0 +1,234 @@
+﻿.rooms-page {
+    width: 100%;
+    max-width: 100%;
+    color: #263445;
+    font-family: inherit;
+}
+
+    .rooms-page *, .rooms-page *::before, .rooms-page *::after {
+        box-sizing: border-box;
+    }
+
+    /* Page Heading */
+    .rooms-page .page-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 24px;
+    }
+
+        .rooms-page .page-heading h2 {
+            margin: 0 0 6px;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .rooms-page .page-heading p {
+            margin: 0;
+            font-size: 13px;
+            color: #788493;
+        }
+
+    .rooms-page .btn-add-room {
+        padding: 10px 20px;
+        background: #fff;
+        border: 1px solid #d0d7e2;
+        border-radius: 7px;
+        color: #263445;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .rooms-page .btn-add-room:hover {
+            background: #f8fafc;
+            border-color: #263445;
+        }
+
+/* Form Panels */
+.form-panel {
+    background: #fff;
+    border: 1px solid #e6eaf0;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 7px rgba(31, 45, 61, 0.035);
+}
+
+    .form-panel h5 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #263445;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #edf0f4;
+    }
+
+/*Form Inputs*/
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #475467;
+        margin-bottom: 6px;
+    }
+
+.form-control-custom {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #e1e6ed;
+    border-radius: 7px;
+    background-color: #fff;
+    color: #263445;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+    .form-control-custom:focus {
+        border-color: #7892b4;
+        box-shadow: 0 0 0 3px rgba(120, 146, 180, 0.1);
+    }
+
+textarea.form-control-custom {
+    height: auto;
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Radio Buttons (Status*/
+.status-radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+.status-radio-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #e1e6ed;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .status-radio-label input[type="radio"] {
+        display: none;
+    }
+
+    .status-radio-label:hover {
+        background-color: #f8fafc;
+    }
+
+    .status-radio-label.selected {
+        border-color: #7892b4;
+        background-color: #f0f4f8;
+        color: #263445;
+    }
+
+/* Amenities Checkboxes */
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.amenity-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #e1e6ed;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .amenity-checkbox-label:hover {
+        background-color: #f8fafc;
+    }
+
+/* Photos Placeholder */
+.photo-box {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    color: #94a3b8;
+    font-size: 24px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+/* Summary Box */
+.summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .summary-list li {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin-bottom: 10px;
+        color: #64748b;
+    }
+
+        .summary-list li strong {
+            color: #263445;
+        }
+
+/* Action Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-cancel {
+    padding: 10px 20px;
+    background: #fff;
+    border: 1px solid #d0d7e2;
+    border-radius: 7px;
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.btn-save {
+    padding: 10px 24px;
+    background: #263445;
+    border: 1px solid #263445;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .btn-save:hover {
+        background: #1a2432;
+    }

@@ -1,0 +1,15 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Error";
+}
+<div class="auth-head">
+    <div class="auth-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.1"/></svg>
+    </div>
+    <div>
+        <div class="eyebrow">Something went wrong</div>
+        <h1>Error</h1>
+    </div>
+</div>
+<p class="muted">An unexpected error occurred. Please go back and try again.</p>
+<a class="btn-primary" asp-controller="Dashboard" asp-action="Index">Back to dashboard</a>
