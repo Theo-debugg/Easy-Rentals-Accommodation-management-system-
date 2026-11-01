@@ -7,7 +7,7 @@ namespace EasyRentalsStaff.Controllers;
 
 public class EnquiriesController : Controller
 {
-    /Field Variables
+    //Field Variables
     private const string EnquirySelect = "ReferenceNo,subject,message,status,created_at,student_id";
     private const string MessageSelect = "message,staff_id,created_at";
     private const string MessageColumn = "message";
